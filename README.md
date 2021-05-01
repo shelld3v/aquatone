@@ -1,5 +1,9 @@
 # AQUATONE
 
+**Original: https://github.com/michenriksen/aquatone**
+
+**This is an actively developing aquatone forked from michenriksen's project. I do this because of the author irresponsible on the original project**
+
 Aquatone is a tool for visual inspection of websites across a large amount of hosts and is convenient for quickly gaining an overview of HTTP-based attack surface.
 
 ## Installation
