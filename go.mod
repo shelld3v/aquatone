@@ -1,4 +1,4 @@
-module github.com/michenriksen/aquatone
+module github.com/shelld3v/aquatone
 
 go 1.12
 
