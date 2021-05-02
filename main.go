@@ -9,6 +9,7 @@ import (
 	"os"
 	"strings"
 	"time"
+	"io"
 
 	"github.com/google/uuid"
 	"github.com/shelld3v/aquatone/agents"
@@ -121,8 +122,20 @@ func main() {
 	agents.NewURLTechnologyFingerprinter().Register(sess)
 	agents.NewURLTakeoverDetector().Register(sess)
 
-	reader := bufio.NewReader(os.Stdin)
-	var targets []string
+	var reader io.Reader
+	if *sess.Options.InputFile != "" {
+		//Read from File
+		file, err := os.Open(*sess.Options.InputFile)
+		if err != nil {
+			sess.Out.Fatal("Unable to open input file: %s\n", *sess.Options.InputFile)
+			os.Exit(1)
+		}
+		defer file.Close()
+
+		reader = bufio.NewReader(file)
+	} else {
+		reader = bufio.NewReader(os.Stdin)
+	}
 
 	if *sess.Options.Nmap {
 		parser := parsers.NewNmapParser()
