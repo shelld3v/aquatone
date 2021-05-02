@@ -82,7 +82,7 @@ func (a URLScreenshotter) getOpts() (options []chromedp.ExecAllocatorOption) {
 
 	if *a.session.Options.Resolution != "" {
 		Resolutions := strings.Split(*a.session.Options.Resolution, ",")
-		X, Y := strconv.Atoi(Resolutions[0]), strconv.Atoi(Resolutions[1])
+		X, _, Y, _ := strconv.Atoi(Resolutions[0]), strconv.Atoi(Resolutions[1])
 		options = append(options, chromedp.WindowSize(X, Y))
 	}
 
@@ -99,7 +99,7 @@ func (a URLScreenshotter) execAllocator(parent context.Context) (context.Context
 }
 
 func (a *URLScreenshotter) screenshotPage(p *core.Page) {
-	filePath := fmt.Sprintf("screenshots/%s.png", page.BaseFilename())
+	filePath := fmt.Sprintf("screenshots/%s.png", p.BaseFilename())
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(*a.session.Options.ScreenshotTimeout)*time.Millisecond)
 	ctx, cancel = a.execAllocator(ctx)
