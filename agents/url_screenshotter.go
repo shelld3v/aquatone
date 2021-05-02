@@ -81,10 +81,14 @@ func (a URLScreenshotter) getOpts() (options []chromedp.ExecAllocatorOption) {
 	}
 
 	if *a.session.Options.Resolution != "" {
-		Resolutions := strings.Split(*a.session.Options.Resolution, ",")
-		ResolutionX, _ := strconv.Atoi(Resolutions[0])
-		ResolutionY, _ := strconv.Atoi(Resolutions[1])
-		options = append(options, chromedp.WindowSize(ResolutionX, ResolutionY))
+                options = append(options, chromedp.Flag("window-size", *a.session.Options.Resolution))
+        }
+
+	if *a.session.Options.ThumbnailSize != "" {
+		Thumbsize := strings.Split(*a.session.Options.ThumbnailSize, ",")
+		Width, _ := strconv.Atoi(Thumbsize[0])
+		Height, _ := strconv.Atoi(Thumbsize[1])
+		options = append(options, chromedp.WindowSize(Width, Height))
 	}
 
 	options = append(options, chromedp.UserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"))
