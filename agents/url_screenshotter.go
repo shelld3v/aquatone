@@ -68,7 +68,7 @@ func (a *URLScreenshotter) createTempUserDir() {
 }
 
 func (a URLScreenshotter) getOpts() (options []chromedp.ExecAllocatorOption) {
-	options := []chromedp.ExecAllocatorOption{}
+	options = []chromedp.ExecAllocatorOption{}
 
 	if *a.session.Options.Proxy != "" {
 		options = append(options, chromedp.ProxyServer(*a.session.Options.Proxy))
