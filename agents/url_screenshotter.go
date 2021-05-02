@@ -129,7 +129,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 	var err error
 
 	if *a.session.Options.FullPage {
-		err := chromedp.Run(ctx, chromedp.Tasks{
+		err = chromedp.Run(ctx, chromedp.Tasks{
 			chromedp.Navigate(p.URL),
 			chromedp.Sleep(time.Duration(*a.session.Options.ScreenshotDelay)*time.Millisecond),
 			chromedp.CaptureScreenshot(&pic),
@@ -137,7 +137,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 		})
 	} else {
 		// Source: https://github.com/chromedp/examples/blob/255873ca0d76b00e0af8a951a689df3eb4f224c3/screenshot/main.go
-		err := chromedp.Run(ctx, chromedp.Tasks{
+		err = chromedp.Run(ctx, chromedp.Tasks{
 			chromedp.Navigate(p.URL),
 			chromedp.Sleep(time.Duration(*a.session.Options.ScreenshotDelay)*time.Millisecond),
 			chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
