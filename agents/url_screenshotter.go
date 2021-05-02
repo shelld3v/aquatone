@@ -80,15 +80,12 @@ func (a URLScreenshotter) getOpts() (options []chromedp.ExecAllocatorOption) {
 
 	if *a.session.Options.Resolution != "" {
 		Resolutions := strings.Split(*a.session.Options.Resolution, ",")
-		X, Y := Resolutions[0], Resolutions[1]
-	} else {
-		X, Y := chrome.ResolutionX, chrome.ResolutionY
+		options = append(options, chromedp.WindowSize(Resolutions[0], Resolutions[1]))
 	}
 
 	options = append(options, chromedp.UserAgent(chrome.UserAgent))
 	options = append(options, chromedp.DisableGPU)
 	options = append(options, chromedp.Flag("ignore-certificate-errors", "1"))
-	options = append(options, chromedp.WindowSize(X, Y))
 
 	return options
 }
@@ -105,13 +102,25 @@ func (a *URLScreenshotter) screenshotPage(page *core.Page) {
 	ctx, cancel = a.execAllocator(ctx)
 	ctx, cancel = chromedp.NewContext(ctx)
 
+	defer acancel()
 	defer cancel()
+
+	chromedp.ListenTarget(ctx, func(ev interface{}) {
+		if _, ok := ev.(*page.EventJavascriptDialogOpening); ok {
+			a.session.Out.Debug("%s Error: alert box found\n", a.ID)
+			a.session.Stats.IncrementScreenshotFailed()
+			a.session.Out.Error("%s: screenshot failed: alert box popped up\n", page.URL)
+			return
+		}
+	})
+
 
 	var pic []byte
 	if err := chromedp.Run(ctx, chromedp.Tasks{
 		chromedp.Navigate(page.URL),
-		chromedp.WaitReady("body", chromedp.ByQuery),
-		chromedp.Screenshot("body", &pic, chromedp.NodeVisible, chromedp.ByQuery),
+		chromedp.Sleep(time.Duration(*a.session.Options.ScreenshotDelay)*time.Millisecond),
+		chromedp.CaptureScreenshot([]byte),
+		chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
 	}); err != nil {
 		a.session.Out.Debug("%s Error: %v\n", a.ID, err)
 		a.session.Stats.IncrementScreenshotFailed()
