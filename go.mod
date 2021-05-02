@@ -6,6 +6,7 @@ require (
 	github.com/PuerkitoBio/goquery v1.5.0
 	github.com/asaskevich/EventBus v0.0.0-20180315140547-d46933a94f05
 	github.com/chromedp/chromedp v0.6.0
+	github.com/chromedp/cdproto v0.0.0-20210211211551-bf465a41a1f9
 	github.com/elazarl/goproxy v0.0.0-20190421051319-9d40249d3c2f // indirect
 	github.com/elazarl/goproxy/ext v0.0.0-20190421051319-9d40249d3c2f // indirect
 	github.com/fatih/color v1.7.0
