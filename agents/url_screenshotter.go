@@ -14,6 +14,7 @@ import (
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
 	"github.com/shelld3v/aquatone/core"
+	"github.com/chromedp/cdproto/emulation"
 )
 
 type URLScreenshotter struct {
