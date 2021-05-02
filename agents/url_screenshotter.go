@@ -195,6 +195,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 	a.session.Out.Info("%s: %s\n", p.URL, Green("screenshot successful"))
 	p.ScreenshotPath = filePath
 	p.HasScreenshot = true
+	a.killChromeProcessIfRunning(cmd)
 }
 
 func (a *URLScreenshotter) killChromeProcessIfRunning(cmd *exec.Cmd) {
