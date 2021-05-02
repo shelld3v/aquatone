@@ -105,7 +105,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(*a.session.Options.ScreenshotTimeout)*time.Millisecond)
 	defer cancel()
 
-	ctx, cancel := a.execAllocator(ctx)
+	ctx, cancel = a.execAllocator(ctx)
 	defer cancel()
 
 	ctx, cancel = chromedp.NewContext(ctx)
