@@ -2,8 +2,6 @@ package core
 
 import (
 	"flag"
-	"fmt"
-	"strings"
 )
 
 type Options struct {
