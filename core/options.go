@@ -48,7 +48,7 @@ func ParseOptions() (Options, error) {
 		ScreenshotDelay:   flag.Int("screenshot-delay", 0, "Delay in miliseconds before taking screenshots"),
 		Nmap:              flag.Bool("nmap", false, "Parse input as Nmap/Masscan XML"),
 		NoRedirect:        flag.Bool("no-redirect", false, "Do not follow HTTP redirects"),
-		SaveBody:          flag.Bool("save-body", true, "Save response bodies to files"),
+		SaveBody:          flag.Bool("save-body", false, "Save response bodies to files"),
 		Similarity:	   flag.Float64("similarity", 0.80, "Cluster Similarity Float for Screenshots. Default 0.80"),
 		Silent:            flag.Bool("silent", false, "Suppress all output except for errors"),
 		Debug:             flag.Bool("debug", false, "Print debugging information"),
