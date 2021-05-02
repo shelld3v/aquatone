@@ -126,7 +126,6 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 		chromedp.Sleep(time.Duration(*a.session.Options.ScreenshotDelay)*time.Millisecond),
 		chromedp.CaptureScreenshot(&pic),
 		chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
-		chromedp.WaitVisible("iframe"),
 	}); err != nil {
 		a.session.Out.Debug("%s Error: %v\n", a.ID, err)
 		a.session.Stats.IncrementScreenshotFailed()
