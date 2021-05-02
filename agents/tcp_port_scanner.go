@@ -46,9 +46,6 @@ func (a *TCPPortScanner) OnHost(host string) {
 }
 
 func (a *TCPPortScanner) scanPort(port int, host string) bool {
-	if strings.Contains(host, "://") {
-		return true
-	}
 	conn, _ := net.DialTimeout("tcp", fmt.Sprintf("%s:%d", host, port), time.Duration(*a.session.Options.ScanTimeout)*time.Millisecond)
 	if conn != nil {
 		conn.Close()
