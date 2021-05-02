@@ -83,7 +83,7 @@ func (a URLScreenshotter) getOpts() (options []chromedp.ExecAllocatorOption) {
 		options = append(options, chromedp.WindowSize(Resolutions[0], Resolutions[1]))
 	}
 
-	options = append(options, chromedp.UserAgent(chrome.UserAgent))
+	options = append(options, chromedp.UserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"))
 	options = append(options, chromedp.DisableGPU)
 	options = append(options, chromedp.Flag("ignore-certificate-errors", "1"))
 
