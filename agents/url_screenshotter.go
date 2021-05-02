@@ -8,7 +8,9 @@ import (
 	"os/exec"
 	"time"
 	"strings"
+	"strconv"
 
+	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
 	"github.com/shelld3v/aquatone/core"
 )
@@ -80,7 +82,8 @@ func (a URLScreenshotter) getOpts() (options []chromedp.ExecAllocatorOption) {
 
 	if *a.session.Options.Resolution != "" {
 		Resolutions := strings.Split(*a.session.Options.Resolution, ",")
-		options = append(options, chromedp.WindowSize(Resolutions[0], Resolutions[1]))
+		X, Y := strconv.Atoi(Resolutions[0]), strconv.Atoi(esolutions[1])
+		options = append(options, chromedp.WindowSize(X, Y))
 	}
 
 	options = append(options, chromedp.UserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"))
@@ -102,7 +105,6 @@ func (a *URLScreenshotter) screenshotPage(page *core.Page) {
 	ctx, cancel = a.execAllocator(ctx)
 	ctx, cancel = chromedp.NewContext(ctx)
 
-	defer acancel()
 	defer cancel()
 
 	chromedp.ListenTarget(ctx, func(ev interface{}) {
@@ -119,7 +121,7 @@ func (a *URLScreenshotter) screenshotPage(page *core.Page) {
 	if err := chromedp.Run(ctx, chromedp.Tasks{
 		chromedp.Navigate(page.URL),
 		chromedp.Sleep(time.Duration(*a.session.Options.ScreenshotDelay)*time.Millisecond),
-		chromedp.CaptureScreenshot([]byte),
+		chromedp.CaptureScreenshot(&[]byte),
 		chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
 	}); err != nil {
 		a.session.Out.Debug("%s Error: %v\n", a.ID, err)
