@@ -82,7 +82,7 @@ func (a URLScreenshotter) getOpts() (options []chromedp.ExecAllocatorOption) {
 
 	if *a.session.Options.Resolution != "" {
 		Resolutions := strings.Split(*a.session.Options.Resolution, ",")
-		X, Y := strconv.Atoi(Resolutions[0]), strconv.Atoi(esolutions[1])
+		X, Y := strconv.Atoi(Resolutions[0]), strconv.Atoi(Resolutions[1])
 		options = append(options, chromedp.WindowSize(X, Y))
 	}
 
@@ -98,7 +98,7 @@ func (a URLScreenshotter) execAllocator(parent context.Context) (context.Context
 	return chromedp.NewExecAllocator(parent, a.getOpts()...)
 }
 
-func (a *URLScreenshotter) screenshotPage(page *core.Page) {
+func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 	filePath := fmt.Sprintf("screenshots/%s.png", page.BaseFilename())
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(*a.session.Options.ScreenshotTimeout)*time.Millisecond)
@@ -111,36 +111,38 @@ func (a *URLScreenshotter) screenshotPage(page *core.Page) {
 		if _, ok := ev.(*page.EventJavascriptDialogOpening); ok {
 			a.session.Out.Debug("%s Error: alert box found\n", a.ID)
 			a.session.Stats.IncrementScreenshotFailed()
-			a.session.Out.Error("%s: screenshot failed: alert box popped up\n", page.URL)
+			a.session.Out.Error("%s: screenshot failed: alert box popped up\n", p.URL)
 			return
 		}
 	})
 
 
 	var pic []byte
+
 	if err := chromedp.Run(ctx, chromedp.Tasks{
-		chromedp.Navigate(page.URL),
+		chromedp.Navigate(p.URL),
 		chromedp.Sleep(time.Duration(*a.session.Options.ScreenshotDelay)*time.Millisecond),
-		chromedp.CaptureScreenshot(&[]byte),
+		chromedp.CaptureScreenshot(&pic),
 		chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
+		chromedp.WaitVisible("iframe"),
 	}); err != nil {
 		a.session.Out.Debug("%s Error: %v\n", a.ID, err)
 		a.session.Stats.IncrementScreenshotFailed()
-		a.session.Out.Error("%s: screenshot failed: %s\n", page.URL, err)
+		a.session.Out.Error("%s: screenshot failed: %s\n", p.URL, err)
 		return
 	}
 
 	if err := ioutil.WriteFile(filePath, pic, 0700); err != nil {
 		a.session.Out.Debug("%s Error: %v\n", a.ID(), err)
 		a.session.Stats.IncrementScreenshotFailed()
-		a.session.Out.Error("%s: screenshot failed: %s\n", page.URL, err)
+		a.session.Out.Error("%s: screenshot failed: %s\n", p.URL, err)
 		return
 	}
 
 	a.session.Stats.IncrementScreenshotSuccessful()
-	a.session.Out.Info("%s: %s\n", page.URL, Green("screenshot successful"))
-	page.ScreenshotPath = filePath
-	page.HasScreenshot = true
+	a.session.Out.Info("%s: %s\n", p.URL, Green("screenshot successful"))
+	p.ScreenshotPath = filePath
+	p.HasScreenshot = true
 }
 
 func (a *URLScreenshotter) killChromeProcessIfRunning(cmd *exec.Cmd) {
