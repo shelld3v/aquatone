@@ -29,42 +29,51 @@ aquatone || . "$(ls ~/.bashrc || ~/.bash_profile)"
 ### Command-line options:
 
 ```
+  Usage of aquatone:
   -chrome-path string
-    	Full path to the Chrome/Chromium executable to use. By default, aquatone will search for Chrome or Chromium
+        Full path to the Chrome/Chromium executable to use. By default, aquatone will search for Chrome or Chromium
   -debug
-    	Print debugging information
+        Print debugging information
   -http-timeout int
-    	Timeout in milliseconds for HTTP requests (default 3000)
+        Timeout in miliseconds for HTTP requests (default 15000)
+  -inputfile string
+        Input file to parse hosts (Nmap or Raw) rather than STDIN
   -nmap
-    	Parse input as Nmap/Masscan XML
+        Parse input as Nmap/Masscan XML
+  -no-redirect
+        Do not follow HTTP redirects
   -offline
-	Use offline js files to generate the default template report.
+        Use offline js files to generate the default template report.
   -out string
-    	Directory to write files to (default ".")
+        Directory to write files to (default ".")
   -ports string
-    	Ports to scan on hosts. Supported list aliases: small, medium, large, xlarge (default "80,443,8000,8080,8443")
+        Ports to scan on hosts. Supported list aliases: small, medium, large, xlarge (default "80,443,8000,8080,8443")
   -proxy string
-    	Proxy to use for HTTP requests
+        Proxy to use for HTTP requests
   -resolution string
-    	screenshot resolution (default "1440,900")
+        screenshot resolution (default "1440,900")
   -save-body
-    	Save response bodies to files (default true)
+        Save response bodies to files (default true)
   -scan-timeout int
-    	Timeout in milliseconds for port scans (default 100)
-  -screenshot-timeout int
-    	Timeout in miliseconds for screenshots (default 30000)
+        Timeout in miliseconds for port scans (default 5000)
   -screenshot-delay int
-    	Delay before taking screenshot (default 0 => deactivated)
+        The delay before taking screenshots
+  -screenshot-timeout int
+        Timeout in miliseconds for screenshots (default 30000)
   -session string
-    	Load Aquatone session file and generate HTML report
+        Load Aquatone session file and generate HTML report
   -silent
-    	Suppress all output except for errors
+        Suppress all output except for errors
+  -similarity float
+        Cluster Similarity Float for Screenshots. Default 0.80 (default 0.8)
   -template-path string
-    	Path to HTML template to use for report
+        Path to HTML template to use for report
   -threads int
-    	Number of concurrent threads (default number of logical CPUs)
+        Number of concurrent threads (default number of logical CPUs)
+  -timeout int
+        Generic timeout for everithing. (specific timeouts will be ignored if set)
   -version
-    	Print current Aquatone version
+        Print current Aquatone version
 ```
 
 ### Giving Aquatone data
