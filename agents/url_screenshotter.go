@@ -69,8 +69,9 @@ func (a *URLScreenshotter) createTempUserDir() {
 	a.tempUserDirPath = dir
 }
 
-func (a URLScreenshotter) getOpts() (options []chromedp.ExecAllocatorOption) {
-	options = []chromedp.ExecAllocatorOption{}
+// execAllocator turns a.getOpts() (the chrome instance allocator options) into a derivative context.Context
+func (a URLScreenshotter) execAllocator(parent context.Context) (context.Context, context.CancelFunc) {
+	options := []chromedp.ExecAllocatorOption{}
 
 	if *a.session.Options.Proxy != "" {
 		options = append(options, chromedp.ProxyServer(*a.session.Options.Proxy))
@@ -81,7 +82,10 @@ func (a URLScreenshotter) getOpts() (options []chromedp.ExecAllocatorOption) {
 	}
 
 	if *a.session.Options.Resolution != "" {
-                options = append(options, chromedp.Flag("window-size", *a.session.Options.Resolution))
+                Resolution := strings.Split(*a.session.Options.Resolution, ",")
+                Width, _ := strconv.Atoi(Resolution[0])
+                Height, _ := strconv.Atoi(Resolution[1])
+                options = append(options, chromedp.EmulateViewport(Width, Height))
         }
 
 	if *a.session.Options.ThumbnailSize != "" {
@@ -93,13 +97,13 @@ func (a URLScreenshotter) getOpts() (options []chromedp.ExecAllocatorOption) {
 
 	options = append(options, chromedp.UserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"))
 	options = append(options, chromedp.DisableGPU)
+	options = append(options, chromedp.Flag("headless", true))
+	options = append(options, chromedp.Flag("hide-scrollbars", true))
+	options = append(options, chromedp.Flag("disable-crash-reporter", true))
+	options = append(options, chromedp.Flag("disable-extensions", true))
+	options = append(options, chromedp.Flag("incognito", true))
 	options = append(options, chromedp.Flag("ignore-certificate-errors", true))
 
-	return options
-}
-
-// execAllocator turns a.getOpts() (the chrome instance allocator options) into a derivative context.Context
-func (a URLScreenshotter) execAllocator(parent context.Context) (context.Context, context.CancelFunc) {
 	return chromedp.NewExecAllocator(parent, a.getOpts()...)
 }
 

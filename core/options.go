@@ -35,14 +35,14 @@ type Options struct {
 func ParseOptions() (Options, error) {
 	options := Options{
 		Threads:           flag.Int("threads", 0, "Number of concurrent threads (default number of logical CPUs)"),
-		ThumbnailSize:     flag.String("thumbnail-size", "", "Screenshot resolution (format: width,height)"),
+		ThumbnailSize:     flag.String("thumbnail-size", "", "Screenshot thumbnail size (format: width,height)"),
 		Timeout:           flag.Int("timeout", 0, "Generic timeout for everithing. (specific timeouts will be ignored if set)"),
 		OutDir:            flag.String("out", ".", "Directory to write files to"),
 		SessionPath:       flag.String("session", "", "Load Aquatone session file and generate HTML report"),
 		TemplatePath:      flag.String("template-path", "", "Path to HTML template to use for report"),
 		Proxy:             flag.String("proxy", "", "Proxy to use for HTTP requests"),
 		ChromePath:        flag.String("chrome-path", "", "Full path to the Chrome/Chromium executable to use. By default, aquatone will search for Chrome or Chromium"),
-		Resolution:        flag.String("resolution", "", "Screenshot resolution (format: x,y)"),
+		Resolution:        flag.String("resolution", "", "Screenshot resolution (format: width,height)"),
 		Ports:             flag.String("ports", strings.Trim(strings.Join(strings.Fields(fmt.Sprint(MediumPortList)), ","), "[]"), "Ports to scan on hosts. Supported list aliases: small, medium, large, xlarge"),
 		ScanTimeout:       flag.Int("scan-timeout", 3*1000, "Timeout in miliseconds for port scans"),
 		HTTPTimeout:       flag.Int("http-timeout", 15*1000, "Timeout in miliseconds for HTTP requests"),
