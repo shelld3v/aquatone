@@ -40,7 +40,7 @@ func ParseOptions() (Options, error) {
 		TemplatePath:      flag.String("template-path", "", "Path to HTML template to use for report"),
 		Proxy:             flag.String("proxy", "", "Proxy to use for HTTP requests"),
 		ChromePath:        flag.String("chrome-path", "", "Full path to the Chrome/Chromium executable to use. By default, aquatone will search for Chrome or Chromium"),
-		Resolution:        flag.String("resolution", "1440,900", "screenshot resolution"),
+		Resolution:        flag.String("resolution", "", "Screenshot resolution"),
 		Ports:             flag.String("ports", strings.Trim(strings.Join(strings.Fields(fmt.Sprint(MediumPortList)), ","), "[]"), "Ports to scan on hosts. Supported list aliases: small, medium, large, xlarge"),
 		ScanTimeout:       flag.Int("scan-timeout", 3*1000, "Timeout in miliseconds for port scans"),
 		HTTPTimeout:       flag.Int("http-timeout", 15*1000, "Timeout in miliseconds for HTTP requests"),
