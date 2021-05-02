@@ -23,5 +23,4 @@ require (
 	mvdan.cc/xurls/v2 v2.0.0
 )
 
-
 replace github.com/knq/sysutil v1.0.0 => github.com/chromedp/sysutil v1.0.0
