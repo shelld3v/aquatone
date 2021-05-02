@@ -35,7 +35,7 @@ type Options struct {
 func ParseOptions() (Options, error) {
 	options := Options{
 		Threads:           flag.Int("threads", 0, "Number of concurrent threads (default number of logical CPUs)"),
-		ThumbnailSize:     flag.String("thumbnail-size", "", "Screenshot resolution (format: width,height)")
+		ThumbnailSize:     flag.String("thumbnail-size", "", "Screenshot resolution (format: width,height)"),
 		Timeout:           flag.Int("timeout", 0, "Generic timeout for everithing. (specific timeouts will be ignored if set)"),
 		OutDir:            flag.String("out", ".", "Directory to write files to"),
 		SessionPath:       flag.String("session", "", "Load Aquatone session file and generate HTML report"),
