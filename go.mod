@@ -22,3 +22,6 @@ require (
 	golang.org/x/net v0.0.0-20190424112056-4829fb13d2c6
 	mvdan.cc/xurls/v2 v2.0.0
 )
+
+
+replace github.com/knq/sysutil v1.0.0 => github.com/chromedp/sysutil v1.0.0
