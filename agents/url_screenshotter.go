@@ -118,6 +118,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 
 
 	var pic []byte
+	var res interface{}
 
 	if err := chromedp.Run(ctx, chromedp.Tasks{
 		chromedp.Navigate(p.URL),
