@@ -126,6 +126,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 
 	var pic []byte
 	var res interface{}
+	var err error
 
 	if *a.session.Options.FullPage {
 		err := chromedp.Run(ctx, chromedp.Tasks{
