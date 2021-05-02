@@ -91,7 +91,7 @@ func (a URLScreenshotter) execAllocator(parent context.Context) (context.Context
 
 	options = append(options, chromedp.UserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"))
 	options = append(options, chromedp.DisableGPU)
-	options = append(options, chromedp.Flag("headless", true))
+	options = append(options, chromedp.Headless)
 	options = append(options, chromedp.Flag("hide-scrollbars", true))
 	options = append(options, chromedp.Flag("disable-crash-reporter", true))
 	options = append(options, chromedp.Flag("disable-extensions", true))
