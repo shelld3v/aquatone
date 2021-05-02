@@ -13,6 +13,8 @@ type Options struct {
 	Proxy             *string
 	ChromePath        *string
 	Ports             *string
+	MatchCodes        *string
+	FilterCodes       *string
 	ScanTimeout       *int
 	HTTPTimeout       *int
 	ScreenshotTimeout *int
@@ -38,6 +40,8 @@ func ParseOptions() (Options, error) {
 		SessionPath:       flag.String("session", "", "Load Aquatone session file and generate HTML report"),
 		TemplatePath:      flag.String("template-path", "", "Path to HTML template to use for report"),
 		Proxy:             flag.String("proxy", "", "Proxy to use for HTTP requests"),
+		MatchCodes:        flag.String("match-codes", "", "Valid HTTP status codes to do web scan (seperated by commas)"),
+		FiterCodes:        flag.String("filter-codes", "", "Invalid HTTP status codes to do web scan (seperated by commas)"),
 		ChromePath:        flag.String("chrome-path", "", "Full path to the Chrome/Chromium executable to use. By default, aquatone will search for Chrome or Chromium"),
 		Ports:             flag.String("ports", "80,443,8080,8443", "Ports to scan on hosts. Supported list aliases: small, medium, large, xlarge"),
 		ScanTimeout:       flag.Int("scan-timeout", 3*1000, "Timeout in miliseconds for port scans"),

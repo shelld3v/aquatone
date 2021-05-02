@@ -51,8 +51,7 @@ func (a *URLRequester) OnURL(url string) {
 			Set("User-Agent", RandomUserAgent()).
 			Set("X-Forwarded-For", RandomIPv4Address()).
 			Set("X-Real-Ip", RandomIPv4Address()).
-			Set("Via", fmt.Sprintf("1.1 %s", RandomIPv4Address())).
-			Set("Forwarded", fmt.Sprintf("for=%s;proto=http;by=%s", RandomIPv4Address(), RandomIPv4Address())).End()
+			Set("Via", fmt.Sprintf("1.1 %s", RandomIPv4Address())).End()
 
 		var status string
 		if errs != nil {
@@ -68,6 +67,40 @@ func (a *URLRequester) OnURL(url string) {
 			return
 		}
 
+		if *a.session.Options.MatchCodes != "" {
+			Matched := false
+			for _, MatchCode := range strings.Split(*a.session.Options.MatchCodes, ",") {
+				MatchCode, err := strconv.Atoi(MatchCode)
+				if err != nil {
+					continue
+				}
+
+				if resp.StatusCode == MatchCode {
+					Matched = true
+					break
+				}
+			}
+
+			if !Matched {
+				a.session.Stats.IncrementRequestFailed()
+				return
+			}
+		}
+
+		if *a.session.Options.FilterCodes != "" {
+			for _, FilterCode := range strings.Split(*a.session.Options.FilterCodes, ",") {
+				FilterCode, err := strconv.Atoi(FilterCode)
+				if err != nil {
+					continue
+				}
+
+				if resp.StatusCode == FilterCode {
+					a.session.Stats.IncrementRequestFailed()
+					return
+				}
+			}
+                }
+
 		a.session.Stats.IncrementRequestSuccessful()
 		if resp.StatusCode >= 500 {
 			a.session.Stats.IncrementResponseCode5xx()
@@ -77,7 +110,7 @@ func (a *URLRequester) OnURL(url string) {
 			status = Yellow(resp.Status)
 		} else if resp.StatusCode >= 300 {
 			a.session.Stats.IncrementResponseCode3xx()
-			status = Green(resp.Status)
+			status = Yellow(resp.Status)
 		} else {
 			a.session.Stats.IncrementResponseCode2xx()
 			status = Green(resp.Status)
