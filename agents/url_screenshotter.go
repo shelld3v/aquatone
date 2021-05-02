@@ -9,6 +9,7 @@ import (
 	"time"
 	"strings"
 	"strconv"
+	"math"
 
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
@@ -69,7 +70,7 @@ func (a *URLScreenshotter) createTempUserDir() {
 	a.tempUserDirPath = dir
 }
 
-// execAllocator turns a.getOpts() (the chrome instance allocator options) into a derivative context.Context
+// execAllocator turns the chrome instance allocator options into a derivative context.Context
 func (a URLScreenshotter) execAllocator(parent context.Context) (context.Context, context.CancelFunc) {
 	options := []chromedp.ExecAllocatorOption{}
 
@@ -80,13 +81,6 @@ func (a URLScreenshotter) execAllocator(parent context.Context) (context.Context
 	if *a.session.Options.ChromePath != "" {
 		options = append(options, chromedp.ExecPath(*a.session.Options.ChromePath))
 	}
-
-	if *a.session.Options.Resolution != "" {
-                Resolution := strings.Split(*a.session.Options.Resolution, ",")
-                Width, _ := strconv.Atoi(Resolution[0])
-                Height, _ := strconv.Atoi(Resolution[1])
-                options = append(options, chromedp.EmulateViewport(Width, Height))
-        }
 
 	if *a.session.Options.ThumbnailSize != "" {
 		Thumbsize := strings.Split(*a.session.Options.ThumbnailSize, ",")
@@ -132,12 +126,56 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 	var pic []byte
 	var res interface{}
 
-	if err := chromedp.Run(ctx, chromedp.Tasks{
-		chromedp.Navigate(p.URL),
-		chromedp.Sleep(time.Duration(*a.session.Options.ScreenshotDelay)*time.Millisecond),
-		chromedp.CaptureScreenshot(&pic),
-		chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
-	}); err != nil {
+	if *a.session.Options.FullPage {
+		err := chromedp.Run(ctx, chromedp.Tasks{
+			chromedp.Navigate(p.URL),
+			chromedp.Sleep(time.Duration(*a.session.Options.ScreenshotDelay)*time.Millisecond),
+			chromedp.CaptureScreenshot(&pic),
+			chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
+		})
+	} else {
+		// Source: https://github.com/chromedp/examples/blob/255873ca0d76b00e0af8a951a689df3eb4f224c3/screenshot/main.go
+		err := chromedp.Run(ctx, chromedp.Tasks{
+			chromedp.Navigate(p.URL),
+			chromedp.Sleep(time.Duration(*a.session.Options.ScreenshotDelay)*time.Millisecond),
+			chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
+			chromedp.ActionFunc(func(ctx context.Context) error {
+				_, _, ContentSize, err := page.GetLayoutMetrics().Do(ctx)
+				if err != nil {
+					return err
+				}
+
+				Width, Height := int64(math.Ceil(ContentSize.Width)), int64(math.Ceil(ContentSize.Height))
+
+				err = emulation.SetDeviceMetricsOverride(Width, Height, 1, false).
+					WithScreenOrientation(&emulation.ScreenOrientation{
+						Type:  emulation.OrientationTypePortraitPrimary,
+						Angle: 0,
+					}).
+					Do(ctx)
+				if err != nil {
+					return err
+				}
+
+				pic, err = page.CaptureScreenshot().
+					WithQuality(100).
+					WithClip(&page.Viewport{
+						X:      ContentSize.X,
+						Y:      ContentSize.Y,
+						Width:  ContentSize.Width,
+						Height: ContentSize.Height,
+						Scale:  1,
+					}).Do(ctx)
+				if err != nil {
+					return err
+				}
+
+				return nil
+			}),
+		})
+	}
+
+	if err != nil {
 		a.session.Out.Debug("%s Error: %v\n", a.ID, err)
 		a.session.Stats.IncrementScreenshotFailed()
 		a.session.Out.Error("%s: screenshot failed: %s\n", p.URL, err)
