@@ -39,15 +39,22 @@ func (a *URLPublisher) OnTCPPort(port int, host string) {
 }
 
 func (a *URLPublisher) isTLS(port int, host string) bool {
-	if port == 80 {
-		return false
+	NonTLSPorts := []int{80, 4080, 8080}
+	TLSPorts := []int{443, 4443, 8443}
+
+	for _, NonTLSPort := range NonTLSPorts {
+		if port == NonTLSPort {
+			return false
+		}
 	}
 
-	if port == 443 {
-		return true
+	for _, TLSPort := range TLSPorts {
+		if port == TLSPort {
+			return true
+		}
 	}
 
-	dialer := &net.Dialer{Timeout: time.Duration(*a.session.Options.HTTPTimeout) * time.Millisecond}
+	dialer := &net.Dialer{Timeout: time.Duration(*a.session.Options.HTTPTimeout)*time.Millisecond}
 	conf := &tls.Config{
 		InsecureSkipVerify: true,
 	}
