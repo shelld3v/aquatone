@@ -98,6 +98,7 @@ func (a URLScreenshotter) execAllocator(parent context.Context) (context.Context
 	options = append(options, chromedp.Flag("disable-extensions", true))
 	options = append(options, chromedp.Flag("incognito", true))
 	options = append(options, chromedp.Flag("ignore-certificate-errors", true))
+	options = append(options, chromedp.Flag("disable-features", "VizDisplayCompositor"))
 
 	return chromedp.NewExecAllocator(parent, options...)
 }
