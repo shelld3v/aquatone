@@ -127,25 +127,20 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 	var pic []byte
 	var res interface{}
 	var err error
-	var proto string
 
 	if *a.session.Options.FullPage {
 		err = chromedp.Run(ctx, chromedp.Tasks{
-			chromedp.Navigate(p.URL + "?__proto__[foo]==polluted&__proto__.foo=polluted"),
+			chromedp.Navigate(p.URL),
 			chromedp.Sleep(time.Duration(*a.session.Options.ScreenshotDelay)*time.Millisecond),
-			chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
-			// Test for prototype pollution
-			chromedp.Evaluate(`window.foo`, &proto),
 			chromedp.CaptureScreenshot(&pic),
+			chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
 		})
 	} else {
 		// Source: https://github.com/chromedp/examples/blob/255873ca0d76b00e0af8a951a689df3eb4f224c3/screenshot/main.go
 		err = chromedp.Run(ctx, chromedp.Tasks{
-			chromedp.Navigate(p.URL + "?__proto__[foo]==polluted&__proto__.foo=polluted"),
+			chromedp.Navigate(p.URL),
 			chromedp.Sleep(time.Duration(*a.session.Options.ScreenshotDelay)*time.Millisecond),
 			chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
-			// Test for prototype pollution
-			chromedp.Evaluate(`window.foo`, &proto),
 			chromedp.ActionFunc(func(ctx context.Context) error {
 				_, _, ContentSize, err := page.GetLayoutMetrics().Do(ctx)
 				if err != nil {
@@ -187,11 +182,6 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 		a.session.Stats.IncrementScreenshotFailed()
 		a.session.Out.Error("%s: screenshot failed: %s\n", p.URL, err)
 		return
-	}
-
-	if proto == "polluted" {
-		*core.Page.AddTag("Prototype Pollution", "danger", "https://github.com/BlackFan/client-side-prototype-pollution")
-		a.session.Out.Warn("%s: vulnerable to Client-side Prototype Pollution attack\n", p.URL)
 	}
 
 	if err := ioutil.WriteFile(a.session.GetFilePath(filePath), pic, 0700); err != nil {
