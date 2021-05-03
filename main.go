@@ -137,6 +137,7 @@ func main() {
 		reader = bufio.NewReader(os.Stdin)
 	}
 
+	var targets []string
 	if *sess.Options.Nmap {
 		parser := parsers.NewNmapParser()
 		targets, err = parser.Parse(reader)
