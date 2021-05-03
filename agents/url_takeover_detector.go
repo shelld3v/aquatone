@@ -201,7 +201,7 @@ func (a *URLTakeoverDetector) detectAmazonS3(p *core.Page, addrs []string, cname
 }
 
 func (a *URLTakeoverDetector) detectCampaignMonitor(p *core.Page, addrs []string, cname string, body string) bool {
-	if cname != "cname.createsend.com." {
+	if !strings.HasSuffix(cname, ".createsend.com.") {
 		return false
 	}
 	p.AddTag("Campaign Monitor", "info", "https://www.campaignmonitor.com/")
