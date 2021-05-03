@@ -190,7 +190,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 	}
 
 	if proto == "polluted" {
-		*core.Page.AddTag("Prototype Pollution", "danger", "https://github.com/BlackFan/client-side-prototype-pollution")
+		p.AddTag("Prototype Pollution", "danger", "https://github.com/BlackFan/client-side-prototype-pollution")
 		a.session.Out.Warn("%s: vulnerable to Client-side Prototype Pollution attack\n", p.URL)
 	}
 
