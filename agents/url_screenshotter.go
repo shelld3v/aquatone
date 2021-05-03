@@ -146,39 +146,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 			chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
 			// Test for prototype pollution
 			chromedp.Evaluate(`window.foo`, &res, chromedp.EvalAsValue),
-			chromedp.ActionFunc(func(ctx context.Context) error {
-				_, _, ContentSize, err := page.GetLayoutMetrics().Do(ctx)
-				if err != nil {
-					return err
-				}
-
-				Width, Height := int64(math.Ceil(ContentSize.Width)), int64(math.Ceil(ContentSize.Height))
-
-				err = emulation.SetDeviceMetricsOverride(Width, Height, 1, false).
-					WithScreenOrientation(&emulation.ScreenOrientation{
-						Type:  emulation.OrientationTypePortraitPrimary,
-						Angle: 0,
-					}).
-					Do(ctx)
-				if err != nil {
-					return err
-				}
-
-				pic, err = page.CaptureScreenshot().
-					WithQuality(100).
-					WithClip(&page.Viewport{
-						X:      ContentSize.X,
-						Y:      ContentSize.Y,
-						Width:  ContentSize.Width,
-						Height: ContentSize.Height,
-						Scale:  2,
-					}).Do(ctx)
-				if err != nil {
-					return err
-				}
-
-				return nil
-			}),
+			chromedp.FullScreenshot(res, "100"),
 		})
 	}
 
