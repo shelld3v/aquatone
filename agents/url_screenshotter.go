@@ -127,7 +127,6 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 	var pic []byte
 	var res interface{}
 	var err error
-	var proto string
 
 	if *a.session.Options.FullPage {
 		err = chromedp.Run(ctx, chromedp.Tasks{
@@ -135,7 +134,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 			chromedp.Sleep(time.Duration(*a.session.Options.ScreenshotDelay)*time.Millisecond),
 			chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
 			// Test for prototype pollution
-			chromedp.Evaluate(`window.foo`, &proto),
+			chromedp.Evaluate(`window.foo`, &res),
 			chromedp.CaptureScreenshot(&pic),
 		})
 	} else {
@@ -145,7 +144,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 			chromedp.Sleep(time.Duration(*a.session.Options.ScreenshotDelay)*time.Millisecond),
 			chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
 			// Test for prototype pollution
-			chromedp.Evaluate(`window.foo`, &proto),
+			chromedp.Evaluate(`window.foo`, &res),
 			chromedp.ActionFunc(func(ctx context.Context) error {
 				_, _, ContentSize, err := page.GetLayoutMetrics().Do(ctx)
 				if err != nil {
@@ -189,7 +188,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 		return
 	}
 
-	if proto == "polluted" {
+	if res == "polluted" {
 		p.AddTag("Prototype Pollution", "danger", "https://github.com/BlackFan/client-side-prototype-pollution")
 		a.session.Out.Warn("%s: vulnerable to Client-side Prototype Pollution attack\n", p.URL)
 	}
