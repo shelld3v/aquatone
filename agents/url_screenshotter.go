@@ -131,7 +131,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 
 	if *a.session.Options.FullPage {
 		err = chromedp.Run(ctx, chromedp.Tasks{
-			chromedp.Navigate(p.URL + "?__proto__[foo]==polluted&__proto__.foo=polluted"),
+			chromedp.Navigate(p.URL + "?__proto__[foo]==polluted"),
 			chromedp.Sleep(time.Duration(*a.session.Options.ScreenshotDelay)*time.Millisecond),
 			chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
 			// Test for prototype pollution
@@ -141,7 +141,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 	} else {
 		// Source: https://github.com/chromedp/examples/blob/255873ca0d76b00e0af8a951a689df3eb4f224c3/screenshot/main.go
 		err = chromedp.Run(ctx, chromedp.Tasks{
-			chromedp.Navigate(p.URL + "?__proto__[foo]==polluted&__proto__.foo=polluted"),
+			chromedp.Navigate(p.URL + "?__proto__[foo]==polluted"),
 			chromedp.Sleep(time.Duration(*a.session.Options.ScreenshotDelay)*time.Millisecond),
 			chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
 			// Test for prototype pollution
