@@ -39,13 +39,10 @@ func (a *URLPublisher) OnTCPPort(port int, host string) {
 }
 
 func (a *URLPublisher) isTLS(port int, host string) bool {
-	NonTLSPorts := []int{80, 4080, 8080}
 	TLSPorts := []int{443, 4443, 8443}
 
-	for _, NonTLSPort := range NonTLSPorts {
-		if port == NonTLSPort {
-			return false
-		}
+	if port == 80 {
+		return false
 	}
 
 	for _, TLSPort := range TLSPorts {
