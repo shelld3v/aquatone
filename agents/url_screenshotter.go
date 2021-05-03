@@ -166,7 +166,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 						Y:      ContentSize.Y,
 						Width:  ContentSize.Width,
 						Height: ContentSize.Height,
-						Scale:  1,
+						Scale:  2,
 					}).Do(ctx)
 				if err != nil {
 					return err
