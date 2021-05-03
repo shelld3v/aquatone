@@ -9,12 +9,11 @@ import (
 	"time"
 	"strings"
 	"strconv"
-	"math"
+	"encoding/json"
 
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
 	"github.com/shelld3v/aquatone/core"
-	"github.com/chromedp/cdproto/emulation"
 	"github.com/chromedp/cdproto/runtime"
 )
 
@@ -97,6 +96,7 @@ func (a URLScreenshotter) execAllocator(parent context.Context) (context.Context
 	options = append(options, chromedp.Flag("disable-crash-reporter", true))
 	options = append(options, chromedp.Flag("disable-extensions", true))
 	options = append(options, chromedp.Flag("incognito", true))
+	options = append(options, chromedp.Flag("no-first-run", true))
 	options = append(options, chromedp.Flag("ignore-certificate-errors", true))
 	options = append(options, chromedp.Flag("disable-features", "VizDisplayCompositor"))
 
@@ -127,6 +127,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 
 	var pic []byte
 	var res *runtime.RemoteObject
+	var out bytes.Buffer
 	var err error
 
 	if *a.session.Options.FullPage {
@@ -146,7 +147,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 			chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
 			// Test for prototype pollution
 			chromedp.Evaluate(`window.foo`, &res, chromedp.EvalAsValue),
-			chromedp.FullScreenshot(res, "100"),
+			chromedp.FullScreenshot(&pic, "100"),
 		})
 	}
 
@@ -157,7 +158,10 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 		return
 	}
 
-	if res == "polluted" {
+	JsonByte, _ := res.MarshalJSON()
+	_ = json.Indent(&out, JsonByte, "", "\t")
+
+	if out.String() == "polluted" {
 		p.AddTag("Prototype Pollution", "danger", "https://github.com/BlackFan/client-side-prototype-pollution")
 		a.session.Out.Warn("%s: vulnerable to Client-side Prototype Pollution attack\n", p.URL)
 	}
