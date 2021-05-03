@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net"
 	"time"
-	"strings"
 
 	"github.com/shelld3v/aquatone/core"
 )
