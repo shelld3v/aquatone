@@ -159,6 +159,14 @@ func (a *URLTakeoverDetector) runDetectorFunctions(page *core.Page) {
 	if a.detectCampaignMonitor(page, addrs, cname, string(body)) {
 		return
 	}
+
+	if a.detectGemfury(page, addrs, cname, string(body)) {
+		return
+	}
+
+	if a.detectLaunchRock(page, addrs, cname, string(body)) {
+		return
+	}
 }
 
 func (a *URLTakeoverDetector) detectGithubPages(p *core.Page, addrs []string, cname string, body string) bool {
@@ -456,7 +464,7 @@ func (a *URLTakeoverDetector) detectPantheon(p *core.Page, addrs []string, cname
 }
 
 func (a *URLTakeoverDetector) detectAgile(p *core.Page, addrs []string, cname string, body string) bool {
-	if !strings.HasSuffix(cname, "cname.agilecrm.com.") {
+	if cname != "cname.agilecrm.com." {
 		return false
 	}
 	p.AddTag("Agile CRM", "info", "https://www.agilecrm.com/")
@@ -487,6 +495,30 @@ func (a *URLTakeoverDetector) detectCampaignMonitor(p *core.Page, addrs []string
 	if strings.Contains(body, "Trying to access your account?") {
 		p.AddTag("Domain Takeover", "danger", "https://help.campaignmonitor.com/custom-domain-names/")
 		a.session.Out.Warn("%s: vulnerable to takeover on Campaign Monitor\n", p.URL)
+	}
+	return true
+}
+
+func (a *URLTakeoverDetector) detectGemfury(p *core.Page, addrs []string, cname string, body string) bool {
+	if !strings.HasSuffix(cname, ".furyns.com.") {
+		return false
+	}
+	p.AddTag("Gemfury", "info", "https://gemfury.com/")
+	if strings.Contains(body, "404: This page could not be found.") {
+		p.AddTag("Domain Takeover", "danger", "https://gemfury.com/help/custom-domains/")
+		a.session.Out.Warn("%s: vulnerable to takeover on Gemfury\n", p.URL)
+	}
+	return true
+}
+
+func (a *URLLaunchRock) detectLaunchRock(p *core.Page, addrs []string, cname string, body string) bool {
+	if !strings.HasSuffix(cname, ".launchrock.com.") {
+		return false
+	}
+	p.AddTag("LaunchRock", "info", "https://launchrock.com/")
+	if strings.Contains(body, "It looks like you may have taken a wrong turn somewhere. Don't worry...it happens to all of us.") {
+		p.AddTag("Domain Takeover", "danger", "https://help.launchrock.com/support/solutions/articles/1000087021-cname-general-instructions-for-creating-your-cname-record-")
+		a.session.Out.Warn("%s: vulnerable to takeover on LaunchRock\n", p.URL)
 	}
 	return true
 }
