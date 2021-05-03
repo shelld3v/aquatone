@@ -135,7 +135,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 			chromedp.Sleep(time.Duration(*a.session.Options.ScreenshotDelay)*time.Millisecond),
 			chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
 			// Test for prototype pollution
-			chromedp.Evaluate(`window.foo`, &res),
+			chromedp.Evaluate(`window.foo`, &res, chromedp.EvalAsValue),
 			chromedp.CaptureScreenshot(&pic),
 		})
 	} else {
@@ -145,7 +145,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 			chromedp.Sleep(time.Duration(*a.session.Options.ScreenshotDelay)*time.Millisecond),
 			chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
 			// Test for prototype pollution
-			chromedp.Evaluate(`window.foo`, &res),
+			chromedp.Evaluate(`window.foo`, &res, chromedp.EvalAsValue),
 			chromedp.ActionFunc(func(ctx context.Context) error {
 				_, _, ContentSize, err := page.GetLayoutMetrics().Do(ctx)
 				if err != nil {
