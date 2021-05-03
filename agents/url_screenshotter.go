@@ -15,6 +15,7 @@ import (
 	"github.com/chromedp/chromedp"
 	"github.com/shelld3v/aquatone/core"
 	"github.com/chromedp/cdproto/emulation"
+	"github.com/chromedp/cdproto/runtime"
 )
 
 type URLScreenshotter struct {
@@ -125,7 +126,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 
 
 	var pic []byte
-	var res interface{}
+	var res *runtime.RemoteObject
 	var err error
 
 	if *a.session.Options.FullPage {
