@@ -495,7 +495,7 @@ func (a *URLTakeoverDetector) detectGemfury(p *core.Page, addrs []string, cname 
 	return true
 }
 
-func (a *URLLaunchRock) detectLaunchRock(p *core.Page, addrs []string, cname string, body string) bool {
+func (a *URLTakeoverDetector) detectLaunchRock(p *core.Page, addrs []string, cname string, body string) bool {
 	if !strings.HasSuffix(cname, ".launchrock.com.") {
 		return false
 	}
