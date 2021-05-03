@@ -147,6 +147,18 @@ func (a *URLTakeoverDetector) runDetectorFunctions(page *core.Page) {
 	if a.detectPantheon(page, addrs, cname, string(body)) {
 		return
 	}
+
+	if a.detectAgile(page, addrs, cname, string(body)) {
+		return
+	}
+
+	if a.detectKinsta(page, addrs, cname, string(body)) {
+		return
+	}
+
+	if a.detectCampaignMonitor(page, addrs, cname, string(body)) {
+		return
+	}
 }
 
 func (a *URLTakeoverDetector) detectGithubPages(p *core.Page, addrs []string, cname string, body string) bool {
@@ -439,6 +451,42 @@ func (a *URLTakeoverDetector) detectPantheon(p *core.Page, addrs []string, cname
 	if strings.Contains(body, "The gods are wise") {
 		p.AddTag("Domain Takeover", "danger", "https://pantheon.io/docs/domains/")
 		a.session.Out.Warn("%s: vulnerable to takeover on Pantheon\n", p.URL)
+	}
+	return true
+}
+
+func (a *URLTakeoverDetector) detectAgile(p *core.Page, addrs []string, cname string, body string) bool {
+	if !strings.HasSuffix(cname, "cname.agilecrm.com.") {
+		return false
+	}
+	p.AddTag("Agile CRM", "info", "https://www.agilecrm.com/")
+	if strings.Contains(body, "Sorry, this page is no longer available.") {
+		p.AddTag("Domain Takeover", "danger", "https://www.agilecrm.com/")
+		a.session.Out.Warn("%s: vulnerable to takeover on Agile CRM\n", p.URL)
+	}
+	return true
+}
+
+func (a *URLTakeoverDetector) detectKinsta(p *core.Page, addrs []string, cname string, body string) bool {
+	if !strings.HasSuffix(cname, ".kinsta.cloud.") {
+		return false
+	}
+	p.AddTag("Kinsta", "info", "https://kinsta.com/")
+	if strings.Contains(body, "No Site For Domain") {
+		p.AddTag("Domain Takeover", "danger", "https://kinsta.com/knowledgebase/add-domain/")
+		a.session.Out.Warn("%s: vulnerable to takeover on Kinsta\n", p.URL)
+	}
+	return true
+}
+
+func (a *URLTakeoverDetector) detectCampaignMonitor(p *core.Page, addrs []string, cname string, body string) bool {
+	if !strings.HasSuffix(cname, ".createsend.com.") {
+		return false
+	}
+	p.AddTag("Campaign Monitor", "info", "https://campaignmonitor.com/")
+	if strings.Contains(body, "Trying to access your account?") {
+		p.AddTag("Domain Takeover", "danger", "https://help.campaignmonitor.com/custom-domain-names/")
+		a.session.Out.Warn("%s: vulnerable to takeover on Campaign Monitor\n", p.URL)
 	}
 	return true
 }
