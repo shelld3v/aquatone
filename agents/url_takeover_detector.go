@@ -76,10 +76,6 @@ func (a *URLTakeoverDetector) runDetectorFunctions(page *core.Page) {
 		return
 	}
 
-	if a.detectCampaignMonitor(page, addrs, cname, string(body)) {
-		return
-	}
-
 	if a.detectCargoCollective(page, addrs, cname, string(body)) {
 		return
 	}
@@ -483,18 +479,6 @@ func (a *URLTakeoverDetector) detectKinsta(p *core.Page, addrs []string, cname s
 	if strings.Contains(body, "No Site For Domain") {
 		p.AddTag("Domain Takeover", "danger", "https://kinsta.com/knowledgebase/add-domain/")
 		a.session.Out.Warn("%s: vulnerable to takeover on Kinsta\n", p.URL)
-	}
-	return true
-}
-
-func (a *URLTakeoverDetector) detectCampaignMonitor(p *core.Page, addrs []string, cname string, body string) bool {
-	if !strings.HasSuffix(cname, ".createsend.com.") {
-		return false
-	}
-	p.AddTag("Campaign Monitor", "info", "https://campaignmonitor.com/")
-	if strings.Contains(body, "Trying to access your account?") {
-		p.AddTag("Domain Takeover", "danger", "https://help.campaignmonitor.com/custom-domain-names/")
-		a.session.Out.Warn("%s: vulnerable to takeover on Campaign Monitor\n", p.URL)
 	}
 	return true
 }
