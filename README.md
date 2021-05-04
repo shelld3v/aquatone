@@ -2,7 +2,7 @@
 
 **Original: https://github.com/michenriksen/aquatone**
 
-**This is an actively developing aquatone forked from michenriksen's project. I do this because of the author irresponsible on the original project**
+**This is an actively developing aquatone forked from michenriksen's project. I do this because the original project has been stopped updating**
 
 Aquatone is a tool for visual inspection of websites across a large amount of hosts and is convenient for quickly gaining an overview of HTTP-based attack surface.
 
@@ -13,7 +13,7 @@ Aquatone is a tool for visual inspection of websites across a large amount of ho
 You'll need a working installation of Go with go 1.11+ modules support.
 
 ```bash
-go get github.com/shelld3v/aquatone
+go get -u github.com/shelld3v/aquatone
 ```
 
 ## Usage
