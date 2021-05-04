@@ -136,15 +136,6 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 	}
 
 	if *a.session.Options.FullPage {
-		err = chromedp.Run(ctx, chromedp.Tasks{
-			chromedp.Navigate(url),
-			chromedp.Sleep(time.Duration(*a.session.Options.ScreenshotDelay)*time.Millisecond),
-			chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
-			// Check prototype value
-			chromedp.Evaluate(`window.foo`, &res),
-			chromedp.CaptureScreenshot(&pic),
-		})
-	} else {
 		// Source: https://github.com/chromedp/examples/blob/master/screenshot/main.go
 		err = chromedp.Run(ctx, chromedp.Tasks{
 			chromedp.Navigate(url),
@@ -153,6 +144,15 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 			// Check prototype value
 			chromedp.Evaluate(`window.foo`, &res),
 			chromedp.FullScreenshot(&pic, 100),
+		})
+	} else {
+		err = chromedp.Run(ctx, chromedp.Tasks{
+			chromedp.Navigate(url),
+			chromedp.Sleep(time.Duration(*a.session.Options.ScreenshotDelay)*time.Millisecond),
+			chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
+			// Check prototype value
+			chromedp.Evaluate(`window.foo`, &res),
+			chromedp.CaptureScreenshot(&pic),
 		})
 	}
 
