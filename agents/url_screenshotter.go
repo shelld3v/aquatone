@@ -9,7 +9,6 @@ import (
 	"time"
 	"strings"
 	"strconv"
-	"encoding/json"
 
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
