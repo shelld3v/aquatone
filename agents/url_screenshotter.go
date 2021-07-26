@@ -116,7 +116,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 
 	chromedp.ListenTarget(ctx, func(ev interface{}) {
 		if _, ok := ev.(*page.EventJavascriptDialogOpening); ok {
-			a.session.Out.Debug("%s Error: alert box found\n", a.ID)
+			a.session.Out.Debug("%v Error: alert box found\n", a.ID)
 			a.session.Stats.IncrementScreenshotFailed()
 			a.session.Out.Error("%s: screenshot failed: alert box popped up\n", p.URL)
 			return
@@ -146,7 +146,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 	}
 
 	if err != nil {
-		a.session.Out.Debug("%s Error: %v\n", a.ID, err)
+		a.session.Out.Debug("%v Error: %v\n", a.ID, err)
 		a.session.Stats.IncrementScreenshotFailed()
 		a.session.Out.Error("%s: screenshot failed: %s\n", p.URL, err)
 		return
