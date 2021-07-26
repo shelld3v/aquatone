@@ -97,7 +97,7 @@ func URLEscape(s string) string {
 func Gorequest(o core.Options) *gorequest.SuperAgent {
 	return gorequest.New().
 		Proxy(*o.Proxy).
-		Timeout(time.Duration(*o.HTTPTimeout) * time.Millisecond).
+		Timeout(time.Duration(*a.session.Options.HTTPTimeout)*time.Millisecond).
 		SetDebug(*o.Debug).
 		TLSClientConfig(&tls.Config{InsecureSkipVerify: true})
 }

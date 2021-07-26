@@ -38,9 +38,8 @@ func (a *URLRequester) OnURL(url string) {
 	go func(url string) {
 		defer a.session.WaitGroup.Done()
 		req := Gorequest(a.session.Options)
+		randomip := RandomIPv4Address()
 		resp, _, errs := req.Get(url).
-			TLSClientConfig(&tls.Config{ InsecureSkipVerify: true}).
-			Timeout(time.Duration(*a.session.Options.HTTPTimeout)*time.Millisecond).
 			RedirectPolicy(
 				func(req gorequest.Request, via []gorequest.Request) error {
 					if *a.session.Options.NoRedirect {
@@ -50,9 +49,11 @@ func (a *URLRequester) OnURL(url string) {
 				},
 			).
 			Set("User-Agent", RandomUserAgent()).
-			Set("X-Forwarded-For", RandomIPv4Address()).
-			Set("X-Real-Ip", RandomIPv4Address()).
-			Set("Via", fmt.Sprintf("1.1 %s", RandomIPv4Address())).End()
+			Set("X-Forwarded-For", ip).
+			Set("X-Real-Ip", ip).
+			Set("X-Client-Ip", ip).
+			Set("Forwarded", "for=%s;proto=http;by=%s", ip, ip).
+			Set("Via", fmt.Sprintf("1.1 %s", ip)).End()
 
 		var status string
 		if errs != nil {
