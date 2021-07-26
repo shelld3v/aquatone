@@ -34,7 +34,7 @@ func (h *Header) SetSecurityFlags() {
 
 func (h Header) decreasesSecurity() bool {
 	switch strings.ToLower(h.Name) {
-	case "server", "wpe-Backend", "x-powered-by", "x-cf-powered-by", "x-pingback":
+	case "server", "wpe-Backend", "x-powered-by", "x-cf-powered-by", "x-pingback", "via":
 		return true
 	case "access-control-allow-origin":
 		if h.Value == "*" {
@@ -45,6 +45,10 @@ func (h Header) decreasesSecurity() bool {
 			return true
 		}
 	}
+	case "cache-control":
+		if strings.HasSuffix(h.Value, "public") {
+			return true
+		}
 	return false
 }
 
@@ -54,12 +58,12 @@ func (h Header) increasesSecurity() bool {
 		return true
 	case "strict-transport-security":
 		return true
-	case "x-frame-options":
-		return true
 	case "referrer-policy":
 		return true
 	case "public-key-pins":
 		return true
+	case "x-frame-options":
+                return true
 	case "x-permitted-cross-domain-policies":
 		if strings.ToLower(h.Value) == "master-only" {
 			return true

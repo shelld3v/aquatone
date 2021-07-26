@@ -163,6 +163,10 @@ func (a *URLTakeoverDetector) runDetectorFunctions(page *core.Page) {
 	if a.detectLaunchRock(page, addrs, cname, string(body)) {
 		return
 	}
+
+	if a.detectBigCartel(page, addrs, cname, string(body)) {
+                return
+        }
 }
 
 func (a *URLTakeoverDetector) detectGithubPages(p *core.Page, addrs []string, cname string, body string) bool {
@@ -505,4 +509,17 @@ func (a *URLTakeoverDetector) detectLaunchRock(p *core.Page, addrs []string, cna
 		a.session.Out.Warn("%s: vulnerable to takeover on LaunchRock\n", p.URL)
 	}
 	return true
+}
+
+
+func (a *URLTakeoverDetector) detectBigCartel(p *core.Page, addrs []string, cname string, body string) bool {
+        if !strings.HasSuffix(cname, ".bigcartel.com.") {
+                return false
+        }
+        p.AddTag("BigCartel", "info", "https://bigcartel.com/")
+        if strings.Contains(body, "<h1>Oops! We couldn&#8217;t find that page.</h1>") {
+                p.AddTag("Domain Takeover", "danger", "https://help.bigcartel.com/other-domain-providers")
+                a.session.Out.Warn("%s: vulnerable to takeover on BigCartel\n", p.URL)
+        }
+        return true
 }
