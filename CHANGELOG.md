@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Able to filter hosts by string in response
 
 ### Changed:
-- Rafactor finger-printing feature
+- Refactor finger-printing feature
 - Removed prototype pollution check
 - Updated request headers
 
