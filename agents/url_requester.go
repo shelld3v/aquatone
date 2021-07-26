@@ -83,7 +83,7 @@ func (a *URLRequester) OnURL(url string) {
 
 			if !Matched {
 				a.session.Stats.IncrementRequestFailed()
-				a.session.Out.Debug("[%v] %s returns %s status code which is not in match codes\n", a.ID(), url, resp.StatusCode)
+				a.session.Out.Debug("[%s] %s returns %v status code which is not in match codes\n", a.ID(), url, resp.StatusCode)
 				return
 			}
 		}
@@ -97,7 +97,7 @@ func (a *URLRequester) OnURL(url string) {
 
 				if resp.StatusCode == FilterCode {
 					a.session.Stats.IncrementRequestFailed()
-					a.session.Out.Debug("[%v] %s returns %s status code which is filtered\n", a.ID(), url, resp.StatusCode)
+					a.session.Out.Debug("[%s] %s returns %v status code which is filtered\n", a.ID(), url, resp.StatusCode)
 					return
 				}
 			}
