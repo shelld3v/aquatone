@@ -38,7 +38,7 @@ func (a *URLRequester) OnURL(url string) {
 	go func(url string) {
 		defer a.session.WaitGroup.Done()
 		req := Gorequest(a.session.Options)
-		randomip := RandomIPv4Address()
+		ip := RandomIPv4Address()
 		resp, _, errs := req.Get(url).
 			RedirectPolicy(
 				func(req gorequest.Request, via []gorequest.Request) error {
