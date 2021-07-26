@@ -19,7 +19,7 @@
 // static/wappalyzer_fingerprints.json
 // DO NOT EDIT!
 
-package main
+package core
 
 import (
 	"bytes"
