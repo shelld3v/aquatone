@@ -5,8 +5,6 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
-	"time"
-	"crypto/tls"
 	"net/http"
 	"strconv"
 
@@ -52,7 +50,7 @@ func (a *URLRequester) OnURL(url string) {
 			Set("X-Forwarded-For", ip).
 			Set("X-Real-Ip", ip).
 			Set("X-Client-Ip", ip).
-			Set("Forwarded", "for=%s;proto=http;by=%s", ip, ip).
+			Set("Forwarded", fmt.Sprintf("for=%s;proto=http;by=%s", ip, ip)).
 			Set("Via", fmt.Sprintf("1.1 %s", ip)).End()
 
 		var status string

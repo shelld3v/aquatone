@@ -330,7 +330,7 @@ func NewSession() (*Session, error) {
 		*session.Options.TemplatePath = "static/report_template_local.html"
 		err := copy.Copy("static/js_local_files", *session.Options.OutDir + "/js_local_files")
 		if err != nil {
-			return nil, fmt.Errorf("Error while copying static files:", err)
+			return nil, fmt.Errorf("Error while copying static files: %s", err)
         	}
 	}
 
