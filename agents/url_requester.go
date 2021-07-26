@@ -37,7 +37,7 @@ func (a *URLRequester) OnURL(url string) {
 		defer a.session.WaitGroup.Done()
 		req := Gorequest(a.session.Options)
 		ip := RandomIPv4Address()
-		resp, _, errs := req.Get(url).
+		resp, body, errs := req.Get(url).
 			RedirectPolicy(
 				func(req gorequest.Request, via []gorequest.Request) error {
 					if *a.session.Options.NoRedirect {
@@ -102,6 +102,14 @@ func (a *URLRequester) OnURL(url string) {
 				}
 			}
                 }
+
+		if *a.session.Options.FilterString != "" {
+			if strings.Contains(body, *a.session.Options.FilterString) {
+				a.session.Stats.IncrementRequestFailed()
+				a.session.Out.Debug("[%s] %s has filter string in response body\n", a.ID(), url)
+				return
+			}
+		}
 
 		a.session.Stats.IncrementRequestSuccessful()
 		if resp.StatusCode >= 500 {

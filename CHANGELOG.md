@@ -4,7 +4,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.8.0-shelld3v-beta]
+
+### Added:
+- Added BigCartel domain takeover detection
+- Able to filter hosts by string in response
+
+### Changed:
+- Removed prototype pollution check
+- Updated request headers
+
+## [1.8.0-shelld3v]
+
+### Added:
+- Detect Client-side Prototype Pollution vulnerability
+- Able to filter hosts by HTTP status codes
+- Able to select cluster similarity scale for screenshots
+- Screenshot delay
+- Screenshot thumbnail size
+- Full page screenshotting
+- Support port range
+- Option to not follow redirects
+- Option to use local JS files, so can view Aquatone reports without Internet
+- Option to load targets from file
+- More subdomain-takeover finger-prints
+
+### Changed:
+- Changed screenshot technology from backend to headless chromedp
+- More "hiding IP" headers in requests
 
 ## [1.7.0]
 

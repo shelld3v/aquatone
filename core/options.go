@@ -15,12 +15,13 @@ type Options struct {
 	Ports             *string
 	MatchCodes        *string
 	FilterCodes       *string
+	FilterString      *string
 	ScanTimeout       *int
 	HTTPTimeout       *int
 	ScreenshotTimeout *int
 	ScreenshotDelay   *int
-        ThumbnailSize     *string
-        FullPage          *bool
+	ThumbnailSize     *string
+	FullPage          *bool
 	Nmap              *bool
 	NoRedirect        *bool
 	SaveBody          *bool
@@ -40,8 +41,9 @@ func ParseOptions() (Options, error) {
 		SessionPath:       flag.String("session", "", "Load Aquatone session file and generate HTML report"),
 		TemplatePath:      flag.String("template-path", "", "Path to HTML template to use for report"),
 		Proxy:             flag.String("proxy", "", "Proxy to use for HTTP requests"),
-		MatchCodes:        flag.String("match-codes", "", "Valid HTTP status codes to do screenshot (seperated by commas)"),
-		FilterCodes:       flag.String("filter-codes", "", "Invalid HTTP status codes to do screenshot (seperated by commas)"),
+		MatchCodes:        flag.String("match-codes", "", "Filter hosts that do not return any of these HTTP status codes (seperated by commas)"),
+		FilterCodes:       flag.String("filter-codes", "", "Filter hosts that return any of these HTTP status codes (seperated by commas)"),
+		FilterString:      flag.String("filter-string", "", "Filter host thats have this string in the response body"),
 		ChromePath:        flag.String("chrome-path", "", "Full path to the Chrome/Chromium executable to use. By default, aquatone will search for Chrome or Chromium"),
 		Ports:             flag.String("ports", "80,443,8080,8443", "Ports to scan on hosts. Supported list aliases: small, medium, large, xlarge"),
 		ScanTimeout:       flag.Int("scan-timeout", 3*1000, "Timeout in miliseconds for port scans"),
