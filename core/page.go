@@ -44,11 +44,11 @@ func (h Header) decreasesSecurity() bool {
 		if !strings.HasPrefix(h.Value, "1") {
 			return true
 		}
-	}
 	case "cache-control":
 		if strings.HasSuffix(h.Value, "public") {
 			return true
 		}
+	}
 	return false
 }
 
