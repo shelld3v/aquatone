@@ -19,9 +19,10 @@ require (
 	github.com/parnurzeal/gorequest v0.2.15
 	github.com/pkg/errors v0.8.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0
+	github.com/projectdiscovery/wappalyzergo v0.0.7
 	github.com/remeh/sizedwaitgroup v0.0.0-20180822144253-5e7302b12cce
 	github.com/smartystreets/goconvey v0.0.0-20190330032615-68dc04aab96a // indirect
-	golang.org/x/net v0.0.0-20190424112056-4829fb13d2c6
+	golang.org/x/net v0.0.0-20210405180319-a5a99cb37ef4
 	mvdan.cc/xurls/v2 v2.0.0
 )
 
