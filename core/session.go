@@ -107,6 +107,7 @@ func (s *Session) Start() {
 }
 
 func (s *Session) End() {
+	s.Out.CloseErrorLog()
 	s.Stats.FinishedAt = time.Now()
 }
 
@@ -211,7 +212,7 @@ func (s *Session) initPorts() {
 
 func (s *Session) initLogger() {
 	s.Out = &Logger{}
-	s.Out.SetDebug(s.Options.Debug)
+	s.Out.SetErrorLog(s.Options.OutDir + "/aquatone_log.log")
 	s.Out.SetSilent(s.Options.Silent)
 }
 
@@ -326,7 +327,7 @@ func NewSession() (*Session, error) {
 	outdir := filepath.Clean(session.Options.OutDir)
 	session.Options.OutDir = outdir
 
-    if session.Options.Offline  {
+	if session.Options.Offline  {
 		session.Options.TemplatePath = "static/report_template_local.html"
 		err := copy.Copy("static/js_local_files", session.Options.OutDir + "/js_local_files")
 		if err != nil {

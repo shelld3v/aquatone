@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Changed:
 - Updated colors/styles of report tags
+- Replaced debug mode with an error log inside output directory
 
 ## [1.9.0-shelld3v]
 

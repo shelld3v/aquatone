@@ -28,7 +28,6 @@ type Options struct {
 	Nmap              bool
 	SaveBody          bool
 	Silent            bool
-	Debug             bool
 	Version           bool
 	Offline           bool
 	Similarity	  float64
@@ -72,7 +71,6 @@ func ParseOptions() (Options, error) {
 	flag.BoolVar(&opts.FollowRedirect, "follow-redirect", false, "Follow HTTP redirects")
 	flag.BoolVar(&opts.SaveBody, "save-body", true, "Save response bodies to files")
 	flag.BoolVar(&opts.Silent, "silent", false, "Suppress all output except for errors")
-	flag.BoolVar(&opts.Debug, "debug", false, "Print debugging information")
 	flag.BoolVar(&opts.Version, "version", false, "Print current Aquatone version")
 	flag.BoolVar(&opts.Offline, "offline", false, "Use offline JS files to generate the template report (can be browsed without Internet)")
 	flag.Float64Var(&opts.Similarity, "similarity", 0.80, "Similarity rate for screenshots clustering")
