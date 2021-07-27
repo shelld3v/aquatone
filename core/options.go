@@ -48,6 +48,7 @@ func ParseOptions() (Options, error) {
 	var headers arrayFlags
 
 	opts := Options{}
+	headers = []string{}
 
 	flag.StringVar(opts.ChromePath, "chrome-path", "", "Full path to the Chrome/Chromium executable to use. By default, aquatone will search for Chrome or Chromium")
 	flag.StringVar(opts.OutDir, "out", ".", "Directory to write files to")
