@@ -166,23 +166,14 @@ func main() {
 
 	sess.EventBus.Publish(core.SessionStart)
 
-	hosts := []string{}
-	urls := []string{}
 	for _, target := range targets {
 		if isURL(target) {
 			if hasSupportedScheme(target) {
-				urls = append(urls, target)
+				sess.EventBus.Publish(core.URL, target)
 			}
 		} else {
-			hosts = append(hosts, target)
+			sess.EventBus.Publish(core.Host, target)
 		}
-	}
-
-	for _, host := range hosts {
-		sess.EventBus.Publish(core.Host, host)
-	}
-	for _, url := range urls {
-		sess.EventBus.Publish(core.URL, url)
 	}
 
 	time.Sleep(1 * time.Second)

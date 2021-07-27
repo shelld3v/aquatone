@@ -64,6 +64,8 @@ func (h Header) increasesSecurity() bool {
 		return true
 	case "x-frame-options":
                 return true
+	case "x-download-options":
+		return true
 	case "x-permitted-cross-domain-policies":
 		if strings.ToLower(h.Value) == "master-only" {
 			return true

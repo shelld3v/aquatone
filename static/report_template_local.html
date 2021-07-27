@@ -36,7 +36,7 @@
     }
 
     .carousel-item .page-card {
-      width: 500px;
+      width: 475px;
       text-align: left;
       margin: 25px 10px 55px 10px;
       display: inline-block;
@@ -668,8 +668,8 @@
     const data = _.extend(parseSession(session), { currentRoute: window.location.hash });
     const router = new VueRouter({
       routes: [
-        { path: '/', alias: '/pages/by-similarity', component: Vue.component('PagesBySimilarityPage'), props: { pageSimilarityClusters: data.pageSimilarityClusters } },
-        { path: '/pages/by-hosts', component: Vue.component('PagesByHostsPage'), props: { pages: data.pages } },
+        { path: '/', alias: '/pages/by-hosts', component: Vue.component('PagesByHostsPage'), props: { pages: data.pages } },
+        { path: '/pages/by-similarity', component: Vue.component('PagesBySimilarityPage'), props: { pageSimilarityClusters: data.pageSimilarityClusters } },
         { path: '/pages/single', component: Vue.component('SinglePagesPage'), props: { pages: data.pages } },
         { path: '/pages/graph', component: Vue.component('GraphPage'), props: { pages: data.pages, pageSimilarityClusters: data.pageSimilarityClusters } },
         { path: '/pages/stats', component: Vue.component('StatsPage'), props: { pages: data.pages, pageSimilarityClusters: data.pageSimilarityClusters, stats: data.stats } },
