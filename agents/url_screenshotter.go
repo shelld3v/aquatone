@@ -128,8 +128,8 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 	var pic []byte
 	var res *runtime.RemoteObject
 	var err error
-	var headers map[string]interface{}
 
+	headers := make(map[string]interface{})
 	for _, h := range a.session.Options.HTTPHeaders {
 		header := strings.SplitN(h, ":", 2)
 		if len(header) > 1 {
