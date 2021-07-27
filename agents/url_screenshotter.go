@@ -75,16 +75,16 @@ func (a *URLScreenshotter) createTempUserDir() {
 func (a URLScreenshotter) execAllocator(parent context.Context) (context.Context, context.CancelFunc) {
 	options := []chromedp.ExecAllocatorOption{}
 
-	if *a.session.Options.Proxy != "" {
-		options = append(options, chromedp.ProxyServer(*a.session.Options.Proxy))
+	if a.session.Options.Proxy != "" {
+		options = append(options, chromedp.ProxyServer(a.session.Options.Proxy))
 	}
 
-	if *a.session.Options.ChromePath != "" {
-		options = append(options, chromedp.ExecPath(*a.session.Options.ChromePath))
+	if a.session.Options.ChromePath != "" {
+		options = append(options, chromedp.ExecPath(a.session.Options.ChromePath))
 	}
 
-	if *a.session.Options.ThumbnailSize != "" {
-		Thumbsize := strings.Split(*a.session.Options.ThumbnailSize, ",")
+	if a.session.Options.ThumbnailSize != "" {
+		Thumbsize := strings.Split(a.session.Options.ThumbnailSize, ",")
 		Width, _ := strconv.Atoi(Thumbsize[0])
 		Height, _ := strconv.Atoi(Thumbsize[1])
 		options = append(options, chromedp.WindowSize(Width, Height))
@@ -106,7 +106,7 @@ func (a URLScreenshotter) execAllocator(parent context.Context) (context.Context
 func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 	filePath := fmt.Sprintf("screenshots/%s.png", p.BaseFilename())
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(*a.session.Options.ScreenshotTimeout)*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(a.session.Options.ScreenshotTimeout)*time.Millisecond)
 	defer cancel()
 
 	ctx, cancel = a.execAllocator(ctx)
@@ -137,13 +137,13 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 		}
 	}
 
-	if *a.session.Options.FullPage {
+	if a.session.Options.FullPage {
 		// Source: https://github.com/chromedp/examples/blob/master/screenshot/main.go
 		err = chromedp.Run(ctx, chromedp.Tasks{
 			network.Enable(),
 			network.SetExtraHTTPHeaders(network.Headers(headers)),
 			chromedp.Navigate(p.URL),
-			chromedp.Sleep(time.Duration(*a.session.Options.ScreenshotDelay)*time.Millisecond),
+			chromedp.Sleep(time.Duration(a.session.Options.ScreenshotDelay)*time.Millisecond),
 			chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
 			chromedp.FullScreenshot(&pic, 100),
 		})
@@ -152,7 +152,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 			network.Enable(),
 			network.SetExtraHTTPHeaders(network.Headers(headers)),
 			chromedp.Navigate(p.URL),
-			chromedp.Sleep(time.Duration(*a.session.Options.ScreenshotDelay)*time.Millisecond),
+			chromedp.Sleep(time.Duration(a.session.Options.ScreenshotDelay)*time.Millisecond),
 			chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
 			chromedp.CaptureScreenshot(&pic),
 		})

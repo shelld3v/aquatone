@@ -157,7 +157,7 @@ func (s *Session) initStats() {
 
 func (s *Session) initPorts() {
 	var ports []int
-	switch *s.Options.Ports {
+	switch s.Options.Ports {
 	case "small":
 		ports = SmallPortList
 	case "", "medium", "default":
@@ -167,7 +167,7 @@ func (s *Session) initPorts() {
 	case "xlarge", "huge":
 		ports = XLargePortList
 	default:
-		for _, p := range strings.Split(*s.Options.Ports, ",") {
+		for _, p := range strings.Split(s.Options.Ports, ",") {
 			port, err := strconv.Atoi(strings.TrimSpace(p))
 			if err != nil {
 				ranges := strings.Split(p, "-")
@@ -211,14 +211,14 @@ func (s *Session) initPorts() {
 
 func (s *Session) initLogger() {
 	s.Out = &Logger{}
-	s.Out.SetDebug(*s.Options.Debug)
-	s.Out.SetSilent(*s.Options.Silent)
+	s.Out.SetDebug(s.Options.Debug)
+	s.Out.SetSilent(s.Options.Silent)
 }
 
 func (s *Session) initThreads() {
-	if *s.Options.Threads == 0 {
+	if s.Options.Threads == 0 {
 		numCPUs := runtime.NumCPU()
-		s.Options.Threads = &numCPUs
+		s.Options.Threads = numCPUs
 	}
 }
 
@@ -227,7 +227,7 @@ func (s *Session) initEventBus() {
 }
 
 func (s *Session) initWaitGroup() {
-	s.WaitGroup = sizedwaitgroup.New(*s.Options.Threads)
+	s.WaitGroup = sizedwaitgroup.New(s.Options.Threads)
 }
 
 func (s *Session) initDirectories() {
@@ -260,7 +260,7 @@ func (s *Session) BaseFilenameFromURL(stru string) string {
 }
 
 func (s *Session) GetFilePath(p string) string {
-	return path.Join(*s.Options.OutDir, p)
+	return path.Join(s.Options.OutDir, p)
 }
 
 func (s *Session) ReadFile(p string) ([]byte, error) {
@@ -300,35 +300,35 @@ func NewSession() (*Session, error) {
 		return nil, err
 	}
 
-	if *session.Options.ChromePath != "" {
-		if _, err := os.Stat(*session.Options.ChromePath); os.IsNotExist(err) {
-			return nil, fmt.Errorf("Chrome path %s does not exist", *session.Options.ChromePath)
+	if session.Options.ChromePath != "" {
+		if _, err := os.Stat(session.Options.ChromePath); os.IsNotExist(err) {
+			return nil, fmt.Errorf("Chrome path %s does not exist", session.Options.ChromePath)
 		}
 	}
 
-	if *session.Options.SessionPath != "" {
-		if _, err := os.Stat(*session.Options.SessionPath); os.IsNotExist(err) {
-			return nil, fmt.Errorf("Session path %s does not exist", *session.Options.SessionPath)
+	if session.Options.SessionPath != "" {
+		if _, err := os.Stat(session.Options.SessionPath); os.IsNotExist(err) {
+			return nil, fmt.Errorf("Session path %s does not exist", session.Options.SessionPath)
 		}
 	}
 
-	if *session.Options.TemplatePath != "" {
-		if _, err := os.Stat(*session.Options.TemplatePath); os.IsNotExist(err) {
-			return nil, fmt.Errorf("Template path %s does not exist", *session.Options.TemplatePath)
+	if session.Options.TemplatePath != "" {
+		if _, err := os.Stat(session.Options.TemplatePath); os.IsNotExist(err) {
+			return nil, fmt.Errorf("Template path %s does not exist", session.Options.TemplatePath)
 		}
 	}
 
 	envOutPath := os.Getenv("AQUATONE_OUT_PATH")
-	if *session.Options.OutDir == "." && envOutPath != "" {
-		session.Options.OutDir = &envOutPath
+	if session.Options.OutDir == "." && envOutPath != "" {
+		session.Options.OutDir = envOutPath
 	}
 
-	outdir := filepath.Clean(*session.Options.OutDir)
-	session.Options.OutDir = &outdir
+	outdir := filepath.Clean(session.Options.OutDir)
+	session.Options.OutDir = outdir
 
-    if *session.Options.Offline  {
-		*session.Options.TemplatePath = "static/report_template_local.html"
-		err := copy.Copy("static/js_local_files", *session.Options.OutDir + "/js_local_files")
+    if session.Options.Offline  {
+		session.Options.TemplatePath = "static/report_template_local.html"
+		err := copy.Copy("static/js_local_files", session.Options.OutDir + "/js_local_files")
 		if err != nil {
 			return nil, fmt.Errorf("Error while copying static files: %s", err)
         	}

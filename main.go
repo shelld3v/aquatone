@@ -50,15 +50,15 @@ func main() {
 		os.Exit(1)
 	}
 
-	if *sess.Options.Version {
+	if sess.Options.Version {
 		sess.Out.Info("%s v%s", core.Name, core.Version)
 		os.Exit(0)
 	}
 
-	fi, err := os.Stat(*sess.Options.OutDir)
+	fi, err := os.Stat(sess.Options.OutDir)
 
 	if os.IsNotExist(err) {
-		sess.Out.Fatal("Output destination %s does not exist\n", *sess.Options.OutDir)
+		sess.Out.Fatal("Output destination %s does not exist\n", sess.Options.OutDir)
 		os.Exit(1)
 	}
 
@@ -69,24 +69,24 @@ func main() {
 
 	sess.Out.Important("%s v%s started at %s\n\n", core.Name, core.Version, sess.Stats.StartedAt.Format(time.RFC3339))
 
-	if *sess.Options.SessionPath != "" {
-		jsonSession, err := ioutil.ReadFile(*sess.Options.SessionPath)
+	if sess.Options.SessionPath != "" {
+		jsonSession, err := ioutil.ReadFile(sess.Options.SessionPath)
 		if err != nil {
-			sess.Out.Fatal("Unable to read session file at %s: %s\n", *sess.Options.SessionPath, err)
+			sess.Out.Fatal("Unable to read session file at %s: %s\n", sess.Options.SessionPath, err)
 			os.Exit(1)
 		}
 
 		var parsedSession core.Session
 		if err := json.Unmarshal(jsonSession, &parsedSession); err != nil {
-			sess.Out.Fatal("Unable to parse session file at %s: %s\n", *sess.Options.SessionPath, err)
+			sess.Out.Fatal("Unable to parse session file at %s: %s\n", sess.Options.SessionPath, err)
 			os.Exit(1)
 		}
 
-		sess.Out.Important("Loaded Aquatone session at %s\n", *sess.Options.SessionPath)
+		sess.Out.Important("Loaded Aquatone session at %s\n", sess.Options.SessionPath)
 		sess.Out.Important("Generating HTML report...")
 		var template []byte
-		if *sess.Options.TemplatePath != "" {
-			template, err = ioutil.ReadFile(*sess.Options.TemplatePath)
+		if sess.Options.TemplatePath != "" {
+			template, err = ioutil.ReadFile(sess.Options.TemplatePath)
 		} else {
 			template, err = sess.Asset("static/report_template.html")
 		}
@@ -123,11 +123,11 @@ func main() {
 	agents.NewURLTakeoverDetector().Register(sess)
 
 	var reader io.Reader
-	if *sess.Options.InputFile != "" {
+	if sess.Options.InputFile != "" {
 		//Read from File
-		file, err := os.Open(*sess.Options.InputFile)
+		file, err := os.Open(sess.Options.InputFile)
 		if err != nil {
-			sess.Out.Fatal("Unable to open input file: %s\n", *sess.Options.InputFile)
+			sess.Out.Fatal("Unable to open input file: %s\n", sess.Options.InputFile)
 			os.Exit(1)
 		}
 		defer file.Close()
@@ -138,7 +138,7 @@ func main() {
 	}
 
 	var targets []string
-	if *sess.Options.Nmap {
+	if sess.Options.Nmap {
 		parser := parsers.NewNmapParser()
 		targets, err = parser.Parse(reader)
 		if err != nil {
@@ -160,9 +160,9 @@ func main() {
 	}
 
 	sess.Out.Important(" :: Targets          : %d\n", len(targets))
-	sess.Out.Important(" :: Threads          : %d\n", *sess.Options.Threads)
+	sess.Out.Important(" :: Threads          : %d\n", sess.Options.Threads)
 	sess.Out.Important(" :: Ports            : %s\n", strings.Trim(strings.Replace(fmt.Sprint(sess.Ports), " ", ", ", -1), "[]"))
-	sess.Out.Important(" :: Output Directory : %s\n\n", *sess.Options.OutDir)
+	sess.Out.Important(" :: Output Directory : %s\n\n", sess.Options.OutDir)
 
 	sess.EventBus.Publish(core.SessionStart)
 
@@ -207,7 +207,7 @@ func main() {
 			addToCluster := true
 			for _, pageURL := range cluster {
 				page2 := sess.GetPage(pageURL)
-				if page2 != nil && core.GetSimilarity(page.PageStructure, page2.PageStructure) < *sess.Options.Similarity {
+				if page2 != nil && core.GetSimilarity(page.PageStructure, page2.PageStructure) < sess.Options.Similarity {
 					addToCluster = false
 					break
 				}
@@ -229,8 +229,8 @@ func main() {
 
 	sess.Out.Important("Generating HTML report...")
 	var template []byte
-	if *sess.Options.TemplatePath != "" {
-		template, err = ioutil.ReadFile(*sess.Options.TemplatePath)
+	if sess.Options.TemplatePath != "" {
+		template, err = ioutil.ReadFile(sess.Options.TemplatePath)
 	} else {
 		template, err = sess.Asset("static/report_template.html")
 	}

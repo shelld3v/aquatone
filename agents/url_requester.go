@@ -40,7 +40,7 @@ func (a *URLRequester) OnURL(url string) {
 		pre := req.Get(url).
 			RedirectPolicy(
 				func(req gorequest.Request, via []gorequest.Request) error {
-					if *a.session.Options.NoRedirect {
+					if a.session.Options.NoRedirect {
 						return http.ErrUseLastResponse
 					}
 					return nil
@@ -75,9 +75,9 @@ func (a *URLRequester) OnURL(url string) {
 			return
 		}
 
-		if *a.session.Options.MatchCodes != "" {
+		if a.session.Options.MatchCodes != "" {
 			Matched := false
-			for _, MatchCode := range strings.Split(*a.session.Options.MatchCodes, ",") {
+			for _, MatchCode := range strings.Split(a.session.Options.MatchCodes, ",") {
 				MatchCode, err := strconv.Atoi(MatchCode)
 				if err != nil {
 					continue
@@ -96,8 +96,8 @@ func (a *URLRequester) OnURL(url string) {
 			}
 		}
 
-		if *a.session.Options.FilterCodes != "" {
-			for _, FilterCode := range strings.Split(*a.session.Options.FilterCodes, ",") {
+		if a.session.Options.FilterCodes != "" {
+			for _, FilterCode := range strings.Split(a.session.Options.FilterCodes, ",") {
 				FilterCode, err := strconv.Atoi(FilterCode)
 				if err != nil {
 					continue
@@ -111,8 +111,8 @@ func (a *URLRequester) OnURL(url string) {
 			}
                 }
 
-		if *a.session.Options.FilterString != "" {
-			if strings.Contains(body, *a.session.Options.FilterString) {
+		if a.session.Options.FilterString != "" {
+			if strings.Contains(body, a.session.Options.FilterString) {
 				a.session.Stats.IncrementRequestFailed()
 				a.session.Out.Debug("[%s] %s has filter string in response body\n", a.ID(), url)
 				return
@@ -143,7 +143,7 @@ func (a *URLRequester) OnURL(url string) {
 		}
 
 		a.writeHeaders(page)
-		if *a.session.Options.SaveBody {
+		if a.session.Options.SaveBody {
 			a.writeBody(page, resp)
 		}
 
