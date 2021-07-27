@@ -70,6 +70,7 @@ var (
 		"Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0",
 		"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36",
 	}
+	blue   = color.New(color.FgBlue).SprintFunc()
 	green  = color.New(color.FgGreen).SprintFunc()
 	yellow = color.New(color.FgYellow).SprintfFunc()
 	red    = color.New(color.FgRed).SprintFunc()
@@ -120,6 +121,10 @@ func BaseFilenameFromURL(s string) string {
 
 func HostAndPortToURL(host string, port int, protocol string) string {
 	return core.HostAndPortToURL(host, port, protocol)
+}
+
+func Blue(s string) string {
+	return blue(s)
 }
 
 func Green(s string) string {

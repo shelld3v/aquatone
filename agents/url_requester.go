@@ -120,7 +120,7 @@ func (a *URLRequester) OnURL(url string) {
 			status = Yellow(resp.Status)
 		} else if resp.StatusCode >= 300 {
 			a.session.Stats.IncrementResponseCode3xx()
-			status = Yellow(resp.Status)
+			status = Blue(resp.Status)
 		} else {
 			a.session.Stats.IncrementResponseCode2xx()
 			status = Green(resp.Status)

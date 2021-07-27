@@ -253,7 +253,8 @@
         <h5 class="card-title" v-if="page.pageTitle">${ page.pageTitle }</h5>
         <h5 class="card-title" v-else><em>No title</em></h5>
         <p class="card-text">
-          <span :class="'badge badge-pill text-break text-wrap ' + badgeClassForStatus()">${ page.status }</span><a v-for="tag in page.tags" :href="tag.link" target="_blank" class="badge badge-pill text-break" :class="'badge-' + tag.type">${ tag.text }</a>
+          <span :class="'badge text-break text-wrap ' + badgeClassForStatus()">${ page.status }</span>
+          <a v-for="tag in page.tags" :href="tag.link" target="_blank" class="badge badge-pill text-break" :class="'badge-' + tag.type">${ tag.text }</a>
         </p>
       </div>
       <div class="card-footer">

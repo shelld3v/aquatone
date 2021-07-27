@@ -56,7 +56,7 @@ func (a *URLTechnologyFingerprinter) OnURLResponsive(url string) {
 
 		fingerprints := wappalyzerClient.Fingerprint(headers, body)
 		for service := range fingerprints {
-			page.AddTag(service, "info", "about:blank") // wappalyzergo fingerprints doesn't contain website information
+			page.AddTag(service, "primary", "about:blank") // wappalyzergo fingerprints doesn't contain website information
 		}
 	}(page)
 }
