@@ -2,9 +2,9 @@ package agents
 
 import (
 	"crypto/tls"
+	"strconv"
+	"strings"
 	"fmt"
-	"net"
-	"time"
 
 	"github.com/shelld3v/aquatone/core"
 )
@@ -39,23 +39,16 @@ func (a *URLPublisher) OnTCPPort(port int, host string) {
 }
 
 func (a *URLPublisher) isTLS(port int, host string) bool {
-	TLSPorts := []int{443, 4443, 8443}
-
-	if port == 80 {
+	if strings.HasSuffix(strconv.Itoa(port), "443") {
+		return true
+	} else if port == 80 {
 		return false
 	}
 
-	for _, TLSPort := range TLSPorts {
-		if port == TLSPort {
-			return true
-		}
-	}
-
-	dialer := &net.Dialer{Timeout: time.Duration(*a.session.Options.HTTPTimeout)*time.Millisecond}
 	conf := &tls.Config{
 		InsecureSkipVerify: true,
 	}
-	conn, err := tls.DialWithDialer(dialer, "tcp", fmt.Sprintf("%s:%d", host, port), conf)
+	conn, err := tls.Dial("tcp", fmt.Sprintf("%s:%d", host, port), conf)
 	if err != nil {
 		return false
 	}
