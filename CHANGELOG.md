@@ -6,10 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## Added:
+### Added:
 - Supported optional headers
 
-## Changed:
+### Changed:
 - Updated colors/styles of report tags
 - Replaced debug mode with an error log inside output directory
 
@@ -148,7 +148,9 @@ Complete rewrite and simplification of Aquatone. Now written in Go and focused o
 - Domain discovery (`aquatone-discover`)
 - Domain takeover discovery (`aquatone-takeover`)
 
-[Unreleased]: https://github.com/michenriksen/aquatone/compare/v1.7.0...HEAD
+[Unreleased]: https://github.com/michenriksen/aquatone/compare/v1.9.0-shelld3v...HEAD
+[1.9.0-shelld3v]: https://github.com/shelld3v/aquatone/compare/v1.8.0-shelld3v...v1.9.0-shelld3v
+[1.8.0-shelld3v]: https://github.com/shelld3v/aquatone/compare/v1.8.0-shelld3v
 [1.7.0]: https://github.com/michenriksen/aquatone/compare/v1.7.0-beta.2...v1.7.0
 [1.7.0-beta.2]: https://github.com/michenriksen/aquatone/compare/v1.7.0-beta...v1.7.0-beta.2
 [1.7.0-beta]: https://github.com/michenriksen/aquatone/compare/v1.6.0...v1.7.0-beta
