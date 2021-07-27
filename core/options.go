@@ -23,9 +23,9 @@ type Options struct {
 	HTTPTimeout       int
 	ScreenshotTimeout int
 	ScreenshotDelay   int
+	FollowRedirect    bool
 	FullPage          bool
 	Nmap              bool
-	NoRedirect        bool
 	SaveBody          bool
 	Silent            bool
 	Debug             bool
@@ -69,7 +69,7 @@ func ParseOptions() (Options, error) {
 	flag.IntVar(&opts.ScreenshotDelay, "screenshot-delay", 0, "Delay in miliseconds before taking screenshots")
 	flag.BoolVar(&opts.FullPage, "full-page", false, "Screenshot full web pages")
 	flag.BoolVar(&opts.Nmap, "nmap", false, "Parse input as Nmap/Masscan XML")
-	flag.BoolVar(&opts.NoRedirect, "no-redirect", false, "Do not follow HTTP redirects")
+	flag.BoolVar(&opts.FollowRedirect, "follow-redirect", false, "Follow HTTP redirects")
 	flag.BoolVar(&opts.SaveBody, "save-body", true, "Save response bodies to files")
 	flag.BoolVar(&opts.Silent, "silent", false, "Suppress all output except for errors")
 	flag.BoolVar(&opts.Debug, "debug", false, "Print debugging information")

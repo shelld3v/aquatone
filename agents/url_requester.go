@@ -3,7 +3,6 @@ package agents
 import (
 	"fmt"
 	"io/ioutil"
-	"os"
 	"strings"
 	"net/http"
 	"strconv"
@@ -38,20 +37,20 @@ func (a *URLRequester) OnURL(url string) {
 		req := Gorequest(a.session.Options)
 		ip := RandomIPv4Address()
 		pre := req.Get(url).
-			RedirectPolicy(
-				func(req gorequest.Request, via []gorequest.Request) error {
-					if a.session.Options.NoRedirect {
-						return http.ErrUseLastResponse
-					}
-					return nil
-				},
-			).
 			Set("User-Agent", RandomUserAgent()).
 			Set("X-Forwarded-For", ip).
 			Set("X-Real-Ip", ip).
 			Set("X-Client-Ip", ip).
 			Set("Forwarded", fmt.Sprintf("for=%s;proto=http;by=%s", ip, ip)).
 			Set("Via", fmt.Sprintf("1.1 %s", ip))
+
+		if !a.session.Options.FollowRedirect {
+			pre.RedirectPolicy(
+				func(req gorequest.Request, via []gorequest.Request) error {
+					return http.ErrUseLastResponse
+				},
+			)
+		}
 
 		for _, h := range a.session.Options.HTTPHeaders {
 			header := strings.SplitN(h, ":", 2)
@@ -66,12 +65,7 @@ func (a *URLRequester) OnURL(url string) {
 			a.session.Stats.IncrementRequestFailed()
 			for _, err := range errs {
 				a.session.Out.Debug("[%s] Error: %v\n", a.ID(), err)
-				if os.IsTimeout(err) {
-					a.session.Out.Error("%s: request timeout\n", url)
-					return
-				}
 			}
-			a.session.Out.Error("%s: failed\n", url)
 			return
 		}
 
