@@ -162,9 +162,9 @@
             Pages
           </a>
           <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+            <a class="dropdown-item" href="#/pages/single">Single Pages</a>
             <a class="dropdown-item" href="#/pages/by-similarity">By Similarity</a>
             <a class="dropdown-item" href="#/pages/by-hosts">By Hosts</a>
-            <a class="dropdown-item" href="#/pages/single">Single Pages</a>
           </div>
         </li>
         <li class="nav-item">
@@ -258,7 +258,7 @@
         </p>
       </div>
       <div class="card-footer">
-        <a href="#" class="btn btn-outline-primary btn-sm card-link" v-on:click="openDetailsModal">View Details</a> <a class="btn btn-outline-secondary btn-sm card-link float-right" :href="page.url" target="_blank" rel="noreferrer" >Visit Page</a>
+        <a href="#" class="btn btn-outline-primary btn-sm card-link" v-on:click="openDetailsModal">View Details</a> <a class="btn btn-outline-secondary btn-sm card-link float-right" :href="page.url" target="_blank" rel="noreferrer">Visit Page</a>
       </div>
     </div>
   </script>
@@ -665,6 +665,8 @@
             return 'table-success';
           } else if (header.decreasesSecurity) {
             return 'table-warning';
+          } else if (header.name == "Location") {
+            return 'table-info';
           }
           return '';
         }

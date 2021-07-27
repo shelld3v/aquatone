@@ -10,6 +10,7 @@ import (
 	"strings"
 	"strconv"
 
+	"github.com/chromedp/cdproto/network"
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
 	"github.com/shelld3v/aquatone/core"
@@ -127,10 +128,20 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 	var pic []byte
 	var res *runtime.RemoteObject
 	var err error
+	var headers map[string]interface{}
+
+	for _, h := range a.session.Options.HTTPHeaders {
+		header := strings.SplitN(h, ":", 2)
+		if len(header) > 1 {
+			headers[header[0]] = header[1]
+		}
+	}
 
 	if *a.session.Options.FullPage {
 		// Source: https://github.com/chromedp/examples/blob/master/screenshot/main.go
 		err = chromedp.Run(ctx, chromedp.Tasks{
+			network.Enable(),
+			network.SetExtraHTTPHeaders(network.Headers(headers)),
 			chromedp.Navigate(p.URL),
 			chromedp.Sleep(time.Duration(*a.session.Options.ScreenshotDelay)*time.Millisecond),
 			chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
@@ -138,6 +149,8 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 		})
 	} else {
 		err = chromedp.Run(ctx, chromedp.Tasks{
+			network.Enable(),
+			network.SetExtraHTTPHeaders(network.Headers(headers)),
 			chromedp.Navigate(p.URL),
 			chromedp.Sleep(time.Duration(*a.session.Options.ScreenshotDelay)*time.Millisecond),
 			chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),

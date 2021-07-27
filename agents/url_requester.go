@@ -37,7 +37,7 @@ func (a *URLRequester) OnURL(url string) {
 		defer a.session.WaitGroup.Done()
 		req := Gorequest(a.session.Options)
 		ip := RandomIPv4Address()
-		resp, body, errs := req.Get(url).
+		pre := req.Get(url).
 			RedirectPolicy(
 				func(req gorequest.Request, via []gorequest.Request) error {
 					if *a.session.Options.NoRedirect {
@@ -51,7 +51,15 @@ func (a *URLRequester) OnURL(url string) {
 			Set("X-Real-Ip", ip).
 			Set("X-Client-Ip", ip).
 			Set("Forwarded", fmt.Sprintf("for=%s;proto=http;by=%s", ip, ip)).
-			Set("Via", fmt.Sprintf("1.1 %s", ip)).End()
+			Set("Via", fmt.Sprintf("1.1 %s", ip))
+
+		for _, h := range a.session.Options.HTTPHeaders {
+			header := strings.SplitN(h, ":", 2)
+			if len(header) > 1 {
+				pre.Set(header[0], header[1])
+			}
+		}
+		resp, body, errs := pre.End()
 
 		var status string
 		if errs != nil {
