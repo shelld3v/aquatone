@@ -23,55 +23,57 @@ go get -u github.com/shelld3v/aquatone@HEAD
 ```
 Usage of aquatone:
   -chrome-path string
-    	Full path to the Chrome/Chromium executable to use. By default, aquatone will search for Chrome or Chromium
+        Full path to the Chrome/Chromium executable to use. By default, aquatone will search for Chrome or Chromium
   -debug
-    	Print debugging information
+        Print debugging information
   -filter-codes string
-    	Invalid HTTP status codes to do web scan (seperated by commas)
+        Filter hosts that return any of these HTTP status codes (seperated by commas)
+  -filter-string string
+        Filter host thats have this string in the response body
   -full-page
-    	Screenshot full web pages
+        Screenshot full web pages
   -http-timeout int
-    	Timeout in miliseconds for HTTP requests (default 15000)
+        Timeout in miliseconds for HTTP requests (default 15000)
   -input-file string
-    	Input file to parse hosts (Nmap or Raw) rather than STDIN
+        Input file to parse hosts (Nmap or Raw) rather than STDIN
   -match-codes string
-    	Valid HTTP status codes to do web scan (seperated by commas)
+        Filter hosts that do not return any of these HTTP status codes (seperated by commas)
   -nmap
-    	Parse input as Nmap/Masscan XML
+        Parse input as Nmap/Masscan XML
   -no-redirect
-    	Do not follow HTTP redirects
+        Do not follow HTTP redirects
   -offline
-    	Use offline js files to generate the default template report.
+        Use offline JS files to generate the template report (can be browsed without Internet)
   -out string
-    	Directory to write files to (default ".")
+        Directory to write files to (default ".")
   -ports string
-    	Ports to scan on hosts. Supported list aliases: small, medium, large, xlarge (default "80,443,8080,8443")
+        Ports to scan on hosts. Supported list aliases: small, medium, large, xlarge (default "80,443,8080,8443")
   -proxy string
-    	Proxy to use for HTTP requests
+        Proxy to use for HTTP requests
   -save-body
-    	Save response bodies to files
+        Save response bodies to files (default true)
   -scan-timeout int
-    	Timeout in miliseconds for port scans (default 3000)
+        Timeout in miliseconds for port scans (default 3000)
   -screenshot-delay int
-    	Delay in miliseconds before taking screenshots
+        Delay in miliseconds before taking screenshots
   -screenshot-timeout int
-    	Timeout in miliseconds for screenshots (default 30000)
+        Timeout in miliseconds for screenshots (default 30000)
   -session string
-    	Load Aquatone session file and generate HTML report
+        Load Aquatone session file and generate HTML report
   -silent
-    	Suppress all output except for errors
+        Suppress all output except for errors
   -similarity float
-    	Cluster Similarity Float for Screenshots. Default 0.80 (default 0.8)
+        Similarity rate for screenshots clustering (default 0.8)
   -template-path string
-    	Path to HTML template to use for report
+        Path to HTML template to use for report
   -threads int
-    	Number of concurrent threads (default number of logical CPUs)
+        Number of concurrent threads (default number of logical CPUs)
   -thumbnail-size string
-    	Screenshot thumbnail size (format: width,height)
+        Screenshot thumbnail size (format: width,height)
   -timeout int
-    	Generic timeout for everithing. (specific timeouts will be ignored if set)
+        Generic timeout for everything. (specific timeouts will be ignored if set)
   -version
-    	Print current Aquatone version
+        Print current Aquatone version
 ```
 
 ### Giving Aquatone data

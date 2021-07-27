@@ -48,7 +48,7 @@ func ParseOptions() (Options, error) {
 		Ports:             flag.String("ports", "80,443,8080,8443", "Ports to scan on hosts. Supported list aliases: small, medium, large, xlarge"),
 		ScanTimeout:       flag.Int("scan-timeout", 3*1000, "Timeout in miliseconds for port scans"),
 		HTTPTimeout:       flag.Int("http-timeout", 15*1000, "Timeout in miliseconds for HTTP requests"),
-		ScreenshotTimeout: flag.Int("screenshot-timeout", 30*1000, "Timeout in miliseconds for screenshots"),
+		ScreenshotTimeout: flag.Int("screenshot-timeout", 40*1000, "Timeout in miliseconds for screenshots"),
 		ScreenshotDelay:   flag.Int("screenshot-delay", 0, "Delay in miliseconds before taking screenshots"),
                 ThumbnailSize:     flag.String("thumbnail-size", "", "Screenshot thumbnail size (format: width,height)"),
 		FullPage:          flag.Bool("full-page", false, "Screenshot full web pages"),
