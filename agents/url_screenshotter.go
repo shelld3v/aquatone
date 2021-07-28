@@ -161,7 +161,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 	if err != nil {
 		a.session.Out.Debug("%s screenshot error: %v\n", a.ID(), err)
 		a.session.Stats.IncrementScreenshotFailed()
-		a.session.Out.Error("%s %s\n", Red(" Screenshot failed:"), p.URL)
+		a.session.Out.Error("%s: %s\n", p.URL, Red("screenshot failed"))
 		return
 	}
 
