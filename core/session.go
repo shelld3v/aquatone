@@ -98,7 +98,6 @@ func (s *Session) Start() {
 	s.Pages = make(map[string]*Page)
 	s.PageSimilarityClusters = make(map[string][]string)
 	s.initStats()
-	s.initOutPath()
 	s.initLogger()
 	s.initPorts()
 	s.initThreads()
@@ -211,16 +210,6 @@ func (s *Session) initPorts() {
 	s.Ports = ports
 }
 
-func (s *Session) initOutPath() {
-	envOutPath := os.Getenv("AQUATONE_OUT_PATH")
-	if s.Options.OutDir == "." && envOutPath != "" {
-		s.Options.OutDir = envOutPath
-	}
-
-	outdir := filepath.Clean(s.Options.OutDir)
-	s.Options.OutDir = outdir
-}
-
 func (s *Session) initLogger() {
 	s.Out = &Logger{}
 	s.Out.SetErrorLog(s.GetFilePath("aquatone_log.log"))
@@ -246,9 +235,9 @@ func (s *Session) initDirectories() {
 	for _, d := range []string{"headers", "html", "screenshots"} {
 		d = s.GetFilePath(d)
 		if _, err := os.Stat(d); os.IsNotExist(err) {
-			err = os.MkdirAll(d, 0755)
+			err = os.Mkdir(d, 0755)
 			if err != nil {
-				s.Out.Fatal("Failed to create required directory %s\n", d)
+				s.Out.Fatal("Failed to create required directory: %s\n", d)
 				os.Exit(1)
 			}
 		}
@@ -311,6 +300,19 @@ func NewSession() (*Session, error) {
 	if session.Options, err = ParseOptions(); err != nil {
 		return nil, err
 	}
+
+	envOutPath := os.Getenv("AQUATONE_OUT_PATH")
+	if session.Options.OutDir == "." && envOutPath != "" {
+		session.Options.OutDir = envOutPath
+	}
+
+	outdir := filepath.Clean(session.Options.OutDir)
+	err = os.Mkdir(outdir, 0755)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to create output directory %s", outdir)
+	}
+
+	session.Options.OutDir = outdir
 
 	if session.Options.ChromePath != "" {
 		if _, err := os.Stat(session.Options.ChromePath); os.IsNotExist(err) {
