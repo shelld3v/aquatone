@@ -45,7 +45,7 @@ func (h Header) decreasesSecurity() bool {
 			return true
 		}
 	case "cache-control":
-		if strings.HasSuffix(h.Value, "public") {
+		if !strings.Contains(h.Value, "max-age=0") && !strings.Contains(h.Value, "private") && !strings.Contains(h.Value, "no-store") {
 			return true
 		}
 	}
@@ -76,6 +76,10 @@ func (h Header) increasesSecurity() bool {
 		}
 	case "x-xss-protection":
 		if strings.HasPrefix(h.Value, "1") {
+			return true
+		}
+	case "cache-control":
+		if strings.Contains(h.Value, "max-age=0") || strings.Contains(h.Value, "no-store") {
 			return true
 		}
 	}
