@@ -98,6 +98,7 @@ func (s *Session) Start() {
 	s.Pages = make(map[string]*Page)
 	s.PageSimilarityClusters = make(map[string][]string)
 	s.initStats()
+	s.initOutPath()
 	s.initLogger()
 	s.initPorts()
 	s.initThreads()
@@ -210,9 +211,19 @@ func (s *Session) initPorts() {
 	s.Ports = ports
 }
 
+func (s *Session) initOutPath() {
+	envOutPath := os.Getenv("AQUATONE_OUT_PATH")
+	if s.Options.OutDir == "." && envOutPath != "" {
+		s.Options.OutDir = envOutPath
+	}
+
+	outdir := filepath.Clean(s.Options.OutDir)
+	s.Options.OutDir = outdir
+}
+
 func (s *Session) initLogger() {
 	s.Out = &Logger{}
-	s.Out.SetErrorLog(s.Options.OutDir + "/aquatone_log.log")
+	s.Out.SetErrorLog(s.GetFilePath("aquatone_log.log"))
 	s.Out.SetSilent(s.Options.Silent)
 }
 
@@ -318,14 +329,6 @@ func NewSession() (*Session, error) {
 			return nil, fmt.Errorf("Template path %s does not exist", session.Options.TemplatePath)
 		}
 	}
-
-	envOutPath := os.Getenv("AQUATONE_OUT_PATH")
-	if session.Options.OutDir == "." && envOutPath != "" {
-		session.Options.OutDir = envOutPath
-	}
-
-	outdir := filepath.Clean(session.Options.OutDir)
-	session.Options.OutDir = outdir
 
 	if session.Options.Offline  {
 		session.Options.TemplatePath = "static/report_template_local.html"
