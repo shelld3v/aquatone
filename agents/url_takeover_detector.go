@@ -80,10 +80,6 @@ func (a *URLTakeoverDetector) runDetectorFunctions(page *core.Page) {
 		return
 	}
 
-	if a.detectFeedPress(page, addrs, cname, string(body)) {
-		return
-	}
-
 	if a.detectGhost(page, addrs, cname, string(body)) {
 		return
 	}
@@ -167,6 +163,22 @@ func (a *URLTakeoverDetector) runDetectorFunctions(page *core.Page) {
 	if a.detectBigCartel(page, addrs, cname, string(body)) {
                 return
         }
+
+	if a.detectTeamWork(page, addrs, cname, string(body)) {
+		return
+	}
+
+	if a.detectShopify(page, addrs, cname, string(body)) {
+		return
+	}
+
+	if a.detectBitbucket(page, addrs, cname, string(body)) {
+		return
+	}
+
+	if a.detectIntercom(page, addrs, cname, string(body)) {
+		return
+	}
 }
 
 func (a *URLTakeoverDetector) detectGithubPages(p *core.Page, addrs []string, cname string, body string) bool {
@@ -223,18 +235,6 @@ func (a *URLTakeoverDetector) detectCargoCollective(p *core.Page, addrs []string
 	if strings.Contains(body, "404 Not Found") {
 		p.AddTag("CargoCollective domain takeover", "dark", "https://support.2.cargocollective.com/Using-a-Third-Party-Domain")
 		a.session.Out.Warn("%s: vulnerable to takeover on Cargo Collective\n", p.URL)
-		return true
-	}
-	return true
-}
-
-func (a *URLTakeoverDetector) detectFeedPress(p *core.Page, addrs []string, cname string, body string) bool {
-	if cname != "redirect.feedpress.me." {
-		return false
-	}
-	if strings.Contains(body, "The feed has not been found.") {
-		p.AddTag("Feedpress domain takeover", "dark", "https://support.feed.press/article/61-how-to-create-a-custom-hostname")
-		a.session.Out.Warn("%s: vulnerable to takeover on FeedPress\n", p.URL)
 		return true
 	}
 	return true
@@ -502,4 +502,48 @@ func (a *URLTakeoverDetector) detectBigCartel(p *core.Page, addrs []string, cnam
 		a.session.Out.Warn("%s: vulnerable to takeover on BigCartel\n", p.URL)
 	}
 	return true
+}
+
+func (a *URLTakeoverDetector) detectTeamWork(p *core.Page, addrs []string, cname string, body string) bool {
+	if !strings.HasSuffix(cname, ".teamwork.com.") {
+		return false
+	}
+	if strings.Contains(body, "Oops - We didn't find your site.") {
+		p.AddTag("TeamWork domain takeover", "dark", "https://support.teamwork.com/projects/general-settings/using-a-custom-domain-name")
+		a.session.Out.Warn("%s: vulnerable to takeover on TeamWork\n", p.URL)
+	}
+	return true
+}
+
+func (a *URLTakeoverDetector) detectShopify(p *core.Page, addrs []string, cname string, body string) bool {
+	if !strings.HasSuffix(cname, ".myshopify.com.") {
+		return false
+	}
+	if strings.Contains(body, "Sorry, this shop is currently unavailable.") {
+		p.AddTag("Shopify domain takeover", "dark", "https://help.shopify.com/en/manual/online-store/domains/add-a-domain/using-existing-domains/connecting-domains")
+		a.session.Out.Warn("%s: vulnerable to takeover on Shopify\n", p.URL)
+	}
+	return true
+}
+
+func (a *URLTakeoverDetector) detectBitbucket(p *core.Page, addrs []string, cname string, body string) bool {
+        if !strings.HasSuffix(cname, ".bitbucket.io.") {
+                return false
+        }
+        if strings.Contains(body, "Repository not found") {
+                p.AddTag("Bitbucket domain takeover", "dark", "https://support.atlassian.com/bitbucket-cloud/docs/publishing-a-website-on-bitbucket-cloud/")
+                a.session.Out.Warn("%s: vulnerable to takeover on Bitbucket\n", p.URL)
+        }
+        return true
+}
+
+func (a *URLTakeoverDetector) detectIntercom(p *core.Page, addrs []string, cname string, body string) bool {
+        if !strings.HasSuffix(cname, "custom.intercom.help.") {
+                return false
+        }
+        if strings.Contains(body, "This page is reserved for artistic dogs.") {
+                p.AddTag("Intercom domain takeover", "dark", "https://developers.intercom.com/installing-intercom/docs/set-up-your-custom-domain")
+                a.session.Out.Warn("%s: vulnerable to takeover on Intercom\n", p.URL)
+        }
+        return true
 }

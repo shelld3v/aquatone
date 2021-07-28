@@ -57,7 +57,7 @@ func (l *Logger) Log(level int, format string, args ...interface{}) {
 	if level == DEBUG {
 		if l.ErrorLog != nil {
 			msg := fmt.Sprintf(format, args...)
-			l.ErrorLog.WriteString(msg + "\n")
+			l.ErrorLog.WriteString(msg)
 		}
 		return
 	}
