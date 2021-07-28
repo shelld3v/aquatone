@@ -685,9 +685,9 @@
     const data = _.extend(parseSession(session), { currentRoute: window.location.hash });
     const router = new VueRouter({
       routes: [
-        { path: '/', alias: '/pages/by-hosts', component: Vue.component('PagesByHostsPage'), props: { pages: data.pages } },
+        { path: '/', alias: '/pages/single', component: Vue.component('SinglePagesPage'), props: { pages: data.pages } },
         { path: '/pages/by-similarity', component: Vue.component('PagesBySimilarityPage'), props: { pageSimilarityClusters: data.pageSimilarityClusters } },
-        { path: '/pages/single', component: Vue.component('SinglePagesPage'), props: { pages: data.pages } },
+        { path: '/pages/by-hosts', component: Vue.component('PagesByHostsPage'), props: { pages: data.pages } },
         { path: '/pages/graph', component: Vue.component('GraphPage'), props: { pages: data.pages, pageSimilarityClusters: data.pageSimilarityClusters } },
         { path: '/pages/stats', component: Vue.component('StatsPage'), props: { pages: data.pages, pageSimilarityClusters: data.pageSimilarityClusters, stats: data.stats } },
         { path: '*', component: Vue.component('NotFoundPage') }
