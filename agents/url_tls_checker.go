@@ -41,7 +41,7 @@ func (a *URLTlsChecker) OnURLResponsive(url string) {
 		tls.VersionTLS12: "TLS 1.2",
 	}
 
-	a.session.Out.Debug("[%s] Received new url: %s\n", a.ID(), url)
+	a.session.Out.Debug("[%s] Received new responsive URL: %s\n", a.ID(), url)
 	page := a.session.GetPage(url)
 	if page == nil {
 		a.session.Out.Error("Unable to find page for URL: %s\n", url)
