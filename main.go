@@ -121,6 +121,7 @@ func main() {
 	agents.NewURLScreenshotter().Register(sess)
 	agents.NewURLTechnologyFingerprinter().Register(sess)
 	agents.NewURLTakeoverDetector().Register(sess)
+	agents.NewURLTlsChecker().Register(sess)
 
 	var reader io.Reader
 	if sess.Options.InputFile != "" {
