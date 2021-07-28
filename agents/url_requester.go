@@ -103,7 +103,7 @@ func (a *URLRequester) OnURL(url string) {
 					return
 				}
 			}
-                }
+		}
 
 		if a.session.Options.FilterString != "" {
 			if strings.Contains(body, a.session.Options.FilterString) {

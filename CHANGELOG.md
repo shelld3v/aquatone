@@ -23,7 +23,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New command line flags `-filter-string` to filter hosts by string in response body
 
 ### Changed:
-- Refactoring of finger-printing feature
 - Some new default HTTP request headers
 - Wappalyzergo for web technology fingerprinting
 

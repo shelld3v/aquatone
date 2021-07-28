@@ -27,7 +27,7 @@ var LogColors = map[int]*color.Color{
 type Logger struct {
 	sync.Mutex
 
-	ErrorLog *os.File
+	DebugLog *os.File
 	silent   bool
 }
 
@@ -35,18 +35,18 @@ func (l *Logger) SetSilent(s bool) {
 	l.silent = s
 }
 
-func (l *Logger) SetErrorLog(path string) {
+func (l *Logger) SetDebugLog(path string) {
 	var err error
 
-	l.ErrorLog, err = os.Create(path)
+	l.DebugLog, err = os.Create(path)
 	if err != nil {
-		l.ErrorLog = nil
+		l.DebugLog = nil
 	}
 }
 
-func (l *Logger) CloseErrorLog() {
-	if l.ErrorLog != nil {
-		l.ErrorLog.Close()
+func (l *Logger) CloseDebugLog() {
+	if l.DebugLog != nil {
+		l.DebugLog.Close()
 	}
 }
 
@@ -55,9 +55,9 @@ func (l *Logger) Log(level int, format string, args ...interface{}) {
 	defer l.Unlock()
 
 	if level == DEBUG {
-		if l.ErrorLog != nil {
+		if l.DebugLog != nil {
 			msg := fmt.Sprintf(format, args...)
-			l.ErrorLog.WriteString(msg)
+			l.DebugLog.WriteString(msg)
 		}
 		return
 	}

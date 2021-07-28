@@ -27,9 +27,7 @@ Usage of aquatone:
   -debug
         Print debugging information
   -filter-codes string
-        Filter hosts that return any of these HTTP status codes (seperated by commas)
-  -filter-string string
-        Filter host thats have this string in the response body
+        Invalid HTTP status codes to do web scan (seperated by commas)
   -full-page
         Screenshot full web pages
   -http-timeout int
@@ -37,13 +35,13 @@ Usage of aquatone:
   -input-file string
         Input file to parse hosts (Nmap or Raw) rather than STDIN
   -match-codes string
-        Filter hosts that do not return any of these HTTP status codes (seperated by commas)
+        Valid HTTP status codes to do web scan (seperated by commas)
   -nmap
         Parse input as Nmap/Masscan XML
   -no-redirect
         Do not follow HTTP redirects
   -offline
-        Use offline JS files to generate the template report (can be browsed without Internet)
+        Use offline js files to generate the default template report.
   -out string
         Directory to write files to (default ".")
   -ports string
@@ -51,7 +49,7 @@ Usage of aquatone:
   -proxy string
         Proxy to use for HTTP requests
   -save-body
-        Save response bodies to files (default true)
+        Save response bodies to files
   -scan-timeout int
         Timeout in miliseconds for port scans (default 3000)
   -screenshot-delay int
@@ -63,7 +61,7 @@ Usage of aquatone:
   -silent
         Suppress all output except for errors
   -similarity float
-        Similarity rate for screenshots clustering (default 0.8)
+        Cluster Similarity Float for Screenshots. Default 0.80 (default 0.8)
   -template-path string
         Path to HTML template to use for report
   -threads int
@@ -71,7 +69,7 @@ Usage of aquatone:
   -thumbnail-size string
         Screenshot thumbnail size (format: width,height)
   -timeout int
-        Generic timeout for everything. (specific timeouts will be ignored if set)
+        Generic timeout for everithing. (specific timeouts will be ignored if set)
   -version
         Print current Aquatone version
 ```
@@ -85,6 +83,7 @@ IPs, hostnames and domain names in the data will undergo scanning for ports that
 **Example:**
 
     $ cat targets.txt | aquatone
+    $ aquatone -input-file targets.txt
 
 ### Output
 
@@ -93,9 +92,10 @@ When Aquatone is done processing the target hosts, it has created a bunch of fil
  - **aquatone_report.html**: An HTML report to open in a browser that displays all the collected screenshots and response headers clustered by similarity.
  - **aquatone_urls.txt**: A file containing all responsive URLs. Useful for feeding into other tools.
  - **aquatone_session.json**: A file containing statistics and page data. Useful for automation.
- - **headers/**: A folder with files containing raw response headers from processed targets
+ - **aquatone_log.log**: A file containing log information of the scan. Useful for debugging.
+ - **headers/**: A folder with files containing raw response headers from processed targets.
  - **html/**: A folder with files containing the raw response bodies from processed targets. If you are processing a large amount of hosts, and don't need this for further analysis, you can disable this with the `-save-body=false` flag to save some disk space.
- - **screenshots/**: A folder with PNG screenshots of the processed targets
+ - **screenshots/**: A folder with PNG screenshots of the processed targets.
 
 The output can easily be zipped up and shared with others or archived.
 
@@ -112,14 +112,14 @@ It is also possible to set a permanent default output destination by defining an
 
 ### Specifying ports to scan
 
-Be default, Aquatone will scan target hosts with a small list of commonly used HTTP ports: 80, 443, 8000, 8080 and 8443. You can change this to your own list of ports with the `-ports` flag:
+Be default, Aquatone will scan target hosts with a small list of commonly used HTTP ports: 80, 443, 8080 and 8443. You can change this to your own list of ports with the `-ports` flag:
 
     $ cat hosts.txt | aquatone -ports 80,443,3000,3001
 
 Aquatone also supports aliases of built-in port lists to make it easier for you:
 
  - **small**: 80, 443
- - **medium**: 80, 443, 8000, 8080, 8443 (same as default)
+ - **medium**: 80, 443, 8000, 8080, 8443
  - **large**: 80, 81, 443, 591, 2082, 2087, 2095, 2096, 3000, 8000, 8001, 8008, 8080, 8083, 8443, 8834, 8888
  - **xlarge**: 80, 81, 300, 443, 591, 593, 832, 981, 1010, 1311, 2082, 2087, 2095, 2096, 2480, 3000, 3128, 3333, 4243, 4567, 4711, 4712, 4993, 5000, 5104, 5108, 5800, 6543, 7000, 7396, 7474, 8000, 8001, 8008, 8014, 8042, 8069, 8080, 8081, 8088, 8090, 8091, 8118, 8123, 8172, 8222, 8243, 8280, 8281, 8333, 8443, 8500, 8834, 8880, 8888, 8983, 9000, 9043, 9060, 9080, 9090, 9091, 9200, 9443, 9800, 9981, 12443, 16080, 18091, 18092, 20720, 28017
 
@@ -155,7 +155,7 @@ am.yahoo.com
 prd-vipui-01.infra.corp.gq1.yahoo.com
 cp103.mail.ir2.yahoo.com
 prd-vipui-01.infra.corp.bf1.yahoo.com
-$ cat hosts.txt | aquatone
+$ cat hosts.txt | aquatone -out reports/yahoo.com
 ```
 
 There are plenty of other DNS enumeration tools out there and Aquatone should work just as well with any other tool:

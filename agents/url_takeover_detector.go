@@ -161,8 +161,8 @@ func (a *URLTakeoverDetector) runDetectorFunctions(page *core.Page) {
 	}
 
 	if a.detectBigCartel(page, addrs, cname, string(body)) {
-                return
-        }
+		return
+	}
 
 	if a.detectTeamWork(page, addrs, cname, string(body)) {
 		return

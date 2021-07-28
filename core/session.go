@@ -107,7 +107,7 @@ func (s *Session) Start() {
 }
 
 func (s *Session) End() {
-	s.Out.CloseErrorLog()
+	s.Out.CloseDebugLog()
 	s.Stats.FinishedAt = time.Now()
 }
 
@@ -212,7 +212,7 @@ func (s *Session) initPorts() {
 
 func (s *Session) initLogger() {
 	s.Out = &Logger{}
-	s.Out.SetErrorLog(s.GetFilePath("aquatone_log.log"))
+	s.Out.SetDebugLog(s.GetFilePath("aquatone_log.log"))
 	s.Out.SetSilent(s.Options.Silent)
 }
 
