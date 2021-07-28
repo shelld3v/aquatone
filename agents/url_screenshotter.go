@@ -168,12 +168,12 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 	if err := ioutil.WriteFile(a.session.GetFilePath(filePath), pic, 0700); err != nil {
 		a.session.Out.Debug("%s %s: screenshot error: %v\n", a.ID(), p.URL, err)
 		a.session.Stats.IncrementScreenshotFailed()
-		a.session.Out.Error("%s %s\n", Red(" Screenshot failed:"), p.URL)
+		a.session.Out.Error("%s: %s\n", p.URL, Red("screenshot failed"))
 		return
 	}
 
 	a.session.Stats.IncrementScreenshotSuccessful()
-	a.session.Out.Info("%s %s\n", Green("Screenshot succeed:"), p.URL)
+	a.session.Out.Info("%s: %s\n", p.URL, Green("screenshot successful"))
 	p.ScreenshotPath = filePath
 	p.HasScreenshot = true
 }
