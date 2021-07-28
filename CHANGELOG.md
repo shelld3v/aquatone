@@ -7,42 +7,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added:
-- Supported optional headers
-- Added some more domain takeover fingerprints
+- New command line flag `-header` to add optional headers to requests
+- More domain takeover fingerprints
+- New `url_tls_checker` agent that check TLS/SSL version of secure web-servers
 
 ### Changed:
-- Updated colors/styles of report tags
-- Replaced debug mode with an error log inside output directory
+- Do not follow redirects by default: `-no-redirect` -> `-follow-redirect`
+- Colors/styles of report tags are now looks cooler
+- Debug mode has been replaced with an error log inside output directory
 
 ## [1.9.0-shelld3v]
 
 ### Added:
-- Added BigCartel domain takeover detection
-- Able to filter hosts by string in response
+- BigCartel domain takeover detection
+- New command line flags `-filter-string` to filter hosts by string in response body
 
 ### Changed:
 - Refactoring of finger-printing feature
-- Removed prototype pollution check
-- Updated request headers
+- Some new default HTTP request headers
+- Wappalyzergo for web technology fingerprinting
+
+### Removed:
+- Client-side Prototype Pollution vulnerability detection (affects scanning result)
 
 ## [1.8.0-shelld3v]
 
 ### Added:
-- Detect Client-side Prototype Pollution vulnerability
-- Able to filter hosts by HTTP status codes
-- Able to select cluster similarity scale for screenshots
-- Screenshot delay
-- Screenshot thumbnail size
-- Full page screenshotting
-- Support port range
-- Option to not follow redirects
-- Option to use local JS files, so can view Aquatone reports without Internet
-- Option to load targets from file
-- More subdomain-takeover finger-prints
+- Client-side Prototype Pollution vulnerability detection
+- New command line flags `-match-codes|-filter-codes` to filter hosts by HTTP status codes
+- New command line flags `-screenshot-delay` to set delay between screenshots
+- New command line flags `-thumbnail-size` to select screenshot thumbnail size
+- New command line flags `-full-page` to do full page screenshotting
+- New command line flags `-no-redirect` to not follow redirects
+- New command line flags `-offline` to use local JS files, able to view Aquatone reports without Internet
+- New command line flags `-input-file` to load targets from file
+- New command line flags `-similarity` to set similarity rate for screenshots clustering
+- Support for port range
+- More subdomain-takeover fingerprints
 
 ### Changed:
 - Changed screenshot technology from backend to headless chromedp
-- More "hiding IP" headers in requests
 
 ## [1.7.0]
 
