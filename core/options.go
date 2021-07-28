@@ -73,7 +73,7 @@ func ParseOptions() (Options, error) {
 	flag.BoolVar(&opts.Silent, "silent", false, "Suppress all output except for errors")
 	flag.BoolVar(&opts.Version, "version", false, "Print current Aquatone version")
 	flag.BoolVar(&opts.Offline, "offline", false, "Use offline JS files to generate the template report (can be browsed without Internet)")
-	flag.Float64Var(&opts.Similarity, "similarity", 0.80, "Similarity rate for screenshots clustering")
+	flag.Float64Var(&opts.Similarity, "similarity", 0.85, "Similarity rate for screenshots clustering")
 	flag.Var(&headers, "http-header", "Optional HTTP request header (can be used multiple times for multiple headers)")
 
 	flag.Parse()

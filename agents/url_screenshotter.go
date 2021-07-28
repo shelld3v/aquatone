@@ -117,9 +117,8 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 
 	chromedp.ListenTarget(ctx, func(ev interface{}) {
 		if _, ok := ev.(*page.EventJavascriptDialogOpening); ok {
-			a.session.Out.Debug("%s Error: alert box found\n", a.ID())
 			a.session.Stats.IncrementScreenshotFailed()
-			a.session.Out.Error("%s: screenshot failed: alert box popped up\n", p.URL)
+			a.session.Out.Debug("[%s] %s: screenshot failed: alert box popped up\n", a.ID(), p.URL)
 			return
 		}
 	})
@@ -159,14 +158,14 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 	}
 
 	if err != nil {
-		a.session.Out.Debug("%s screenshot error: %v\n", a.ID(), err)
+		a.session.Out.Debug("[%s] Screenshot failed for %s: %v\n", a.ID(), p.URL, err)
 		a.session.Stats.IncrementScreenshotFailed()
 		a.session.Out.Error("%s: %s\n", p.URL, Red("screenshot failed"))
 		return
 	}
 
 	if err := ioutil.WriteFile(a.session.GetFilePath(filePath), pic, 0700); err != nil {
-		a.session.Out.Debug("%s %s: screenshot error: %v\n", a.ID(), p.URL, err)
+		a.session.Out.Debug("[%s] Screenshot failed for %s: %v\n", a.ID(), p.URL, err)
 		a.session.Stats.IncrementScreenshotFailed()
 		a.session.Out.Error("%s: %s\n", p.URL, Red("screenshot failed"))
 		return
