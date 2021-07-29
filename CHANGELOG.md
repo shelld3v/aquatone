@@ -6,15 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0-shelld3v]
+
 ### Added:
 - New command line flag `-header` to add optional headers to requests
 - More domain takeover fingerprints
 - New `url_tls_checker` agent that check TLS/SSL version of secure web-servers
 
 ### Changed:
-- Do not follow redirects by default: `-no-redirect` -> `-follow-redirect`
-- Colors/styles of report tags are now looks cooler
-- Debug mode has been replaced with an error log inside output directory
+- Do not follow redirects by default (changed command-line flag `-no-redirect` to `-follow-redirect`)
+- Colors/styles of report tags are now look cooler
+- Debug mode has been replaced with a debug log inside output directory
 
 ## [1.9.0-shelld3v]
 
@@ -152,7 +154,8 @@ Complete rewrite and simplification of Aquatone. Now written in Go and focused o
 - Domain discovery (`aquatone-discover`)
 - Domain takeover discovery (`aquatone-takeover`)
 
-[Unreleased]: https://github.com/michenriksen/aquatone/compare/v1.9.0-shelld3v...HEAD
+[Unreleased]: https://github.com/michenriksen/aquatone/compare/v2.0.0-shelld3v...HEAD
+[2.0.0-shelld3v]: https://github.com/michenriksen/aquatone/compare/v1.9.0-shelld3v...v2.0.0-shelld3v
 [1.9.0-shelld3v]: https://github.com/shelld3v/aquatone/compare/v1.8.0-shelld3v...v1.9.0-shelld3v
 [1.8.0-shelld3v]: https://github.com/shelld3v/aquatone/compare/v1.8.0-shelld3v
 [1.7.0]: https://github.com/michenriksen/aquatone/compare/v1.7.0-beta.2...v1.7.0
