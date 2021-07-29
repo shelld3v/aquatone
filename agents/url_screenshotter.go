@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
-	"os"
 	"os/exec"
 	"time"
 	"strings"
@@ -20,7 +19,6 @@ import (
 type URLScreenshotter struct {
 	session         *core.Session
 	chromePath      string
-	tempUserDirPath string
 }
 
 func NewURLScreenshotter() *URLScreenshotter {
@@ -33,9 +31,7 @@ func (a *URLScreenshotter) ID() string {
 
 func (a *URLScreenshotter) Register(s *core.Session) error {
 	s.EventBus.SubscribeAsync(core.URLResponsive, a.OnURLResponsive, false)
-	s.EventBus.SubscribeAsync(core.SessionEnd, a.OnSessionEnd, false)
 	a.session = s
-	a.createTempUserDir()
 
 	return nil
 }
@@ -53,22 +49,6 @@ func (a *URLScreenshotter) OnURLResponsive(url string) {
 		defer a.session.WaitGroup.Done()
 		a.screenshotPage(page)
 	}(page)
-}
-
-func (a *URLScreenshotter) OnSessionEnd() {
-	a.session.Out.Debug("[%s] Received SessionEnd event\n", a.ID())
-	os.RemoveAll(a.tempUserDirPath)
-	a.session.Out.Debug("[%s] Deleted temporary user directory at: %s\n", a.ID(), a.tempUserDirPath)
-}
-
-func (a *URLScreenshotter) createTempUserDir() {
-	dir, err := ioutil.TempDir("", "aquatone-chrome")
-	if err != nil {
-		a.session.Out.Fatal("Unable to create temporary user directory for Chrome/Chromium browser\n")
-		os.Exit(1)
-	}
-	a.session.Out.Debug("[%s] Created temporary user directory at: %s\n", a.ID(), dir)
-	a.tempUserDirPath = dir
 }
 
 // execAllocator turns the chrome instance allocator options into a derivative context.Context
@@ -90,15 +70,19 @@ func (a URLScreenshotter) execAllocator(parent context.Context) (context.Context
 		options = append(options, chromedp.WindowSize(Width, Height))
 	}
 
-	options = append(options, chromedp.UserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"))
+	options = append(options, chromedp.UserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36"))
 	options = append(options, chromedp.DisableGPU)
 	options = append(options, chromedp.Headless)
+	options = append(options, chromedp.NoFirstRun)
+	options = append(options, chromedp.NoDefaultBrowserCheck)
 	options = append(options, chromedp.Flag("disable-crash-reporter", true))
 	options = append(options, chromedp.Flag("disable-extensions", true))
-	options = append(options, chromedp.Flag("incognito", true))
-	options = append(options, chromedp.Flag("no-first-run", true))
-	options = append(options, chromedp.Flag("ignore-certificate-errors", true))
+	options = append(options, chromedp.Flag("disable-notifications", true))
+	options = append(options, chromedp.Flag("disable-infobars", true))
+	options = append(options, chromedp.Flag("disable-sync", true))
 	options = append(options, chromedp.Flag("disable-features", "VizDisplayCompositor"))
+	options = append(options, chromedp.Flag("incognito", true))
+	options = append(options, chromedp.Flag("ignore-certificate-errors", true))
 
 	return chromedp.NewExecAllocator(parent, options...)
 }
