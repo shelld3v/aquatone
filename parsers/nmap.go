@@ -36,15 +36,6 @@ func (p *NmapParser) Parse(r io.Reader) ([]string, error) {
 	return targets, nil
 }
 
-func (p *NmapParser) isHTTPPort(port int) bool {
-	for _, p := range core.XLargePortList {
-		if p == port {
-			return true
-		}
-	}
-	return false
-}
-
 func (p *NmapParser) hostToURLs(host nmap.Host) []string {
 	var urls []string
 	for _, port := range host.Ports {
@@ -60,10 +51,6 @@ func (p *NmapParser) hostToURLs(host nmap.Host) []string {
 			protocol = "https"
 		} else if port.Service.Name == "http" || port.Service.Name == "http-alt" {
 			protocol = "http"
-		} else {
-			if !p.isHTTPPort(port.PortId) {
-				continue
-			}
 		}
 
 		if len(host.Hostnames) > 0 {
