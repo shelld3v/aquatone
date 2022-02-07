@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.0.0-shelld3v]
+## [1.9.1-shelld3v]
 
 ### Added:
 - New command line flag `-header` to add optional headers to requests
@@ -154,8 +154,8 @@ Complete rewrite and simplification of Aquatone. Now written in Go and focused o
 - Domain discovery (`aquatone-discover`)
 - Domain takeover discovery (`aquatone-takeover`)
 
-[Unreleased]: https://github.com/michenriksen/aquatone/compare/v2.0.0-shelld3v...HEAD
-[2.0.0-shelld3v]: https://github.com/michenriksen/aquatone/compare/v1.9.0-shelld3v...v2.0.0-shelld3v
+[Unreleased]: https://github.com/michenriksen/aquatone/compare/1.9.1-shelld3v...HEAD
+[1.9.1-shelld3v]: https://github.com/michenriksen/aquatone/compare/v1.9.0-shelld3v...1.9.1-shelld3v
 [1.9.0-shelld3v]: https://github.com/shelld3v/aquatone/compare/v1.8.0-shelld3v...v1.9.0-shelld3v
 [1.8.0-shelld3v]: https://github.com/shelld3v/aquatone/compare/v1.8.0-shelld3v
 [1.7.0]: https://github.com/michenriksen/aquatone/compare/v1.7.0-beta.2...v1.7.0
