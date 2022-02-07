@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"net/url"
 	"os"
-	"path"
 	"path/filepath"
 	"runtime"
 	"strconv"
@@ -235,7 +234,7 @@ func (s *Session) initDirectories() {
 	for _, d := range []string{"headers", "html", "screenshots"} {
 		d = s.GetFilePath(d)
 		if _, err := os.Stat(d); os.IsNotExist(err) {
-			err = os.Mkdir(d, 0755)
+			err = os.MkdirAll(d, 0755)
 			if err != nil {
 				s.Out.Fatal("Failed to create required directory: %s\n", d)
 				os.Exit(1)
@@ -261,7 +260,7 @@ func (s *Session) BaseFilenameFromURL(stru string) string {
 }
 
 func (s *Session) GetFilePath(p string) string {
-	return path.Join(s.Options.OutDir, p)
+	return filepath.Join(s.Options.OutDir, p)
 }
 
 func (s *Session) ReadFile(p string) ([]byte, error) {
@@ -307,7 +306,7 @@ func NewSession() (*Session, error) {
 	}
 
 	outdir := filepath.Clean(session.Options.OutDir)
-	err = os.Mkdir(outdir, 0755)
+	err = os.MkdirAll(outdir, 0755)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to create output directory %s", outdir)
 	}
