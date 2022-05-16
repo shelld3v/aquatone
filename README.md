@@ -13,7 +13,7 @@ Aquatone is a tool for visual inspection of websites across a large amount of ho
 You'll need a working installation of Go with go 1.11+ modules support.
 
 ```bash
-go get github.com/shelld3v/aquatone
+GO111MODULE=off go get github.com/shelld3v/aquatone
 ```
 
 ## Usage
