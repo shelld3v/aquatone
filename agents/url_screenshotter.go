@@ -4,20 +4,20 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
-	"time"
-	"strings"
 	"strconv"
+	"strings"
+	"time"
 
 	"github.com/chromedp/cdproto/network"
 	"github.com/chromedp/cdproto/page"
+	"github.com/chromedp/cdproto/runtime"
 	"github.com/chromedp/chromedp"
 	"github.com/shelld3v/aquatone/core"
-	"github.com/chromedp/cdproto/runtime"
 )
 
 type URLScreenshotter struct {
-	session         *core.Session
-	chromePath      string
+	session    *core.Session
+	chromePath string
 }
 
 func NewURLScreenshotter() *URLScreenshotter {
@@ -81,7 +81,6 @@ func (a URLScreenshotter) execAllocator(parent context.Context) (context.Context
 	options = append(options, chromedp.Flag("disable-features", "VizDisplayCompositor"))
 	options = append(options, chromedp.Flag("incognito", true))
 	options = append(options, chromedp.Flag("ignore-certificate-errors", true))
-	options = append(options, chromedp.Flag("password-store", "basic"))
 
 	return chromedp.NewExecAllocator(parent, options...)
 }
@@ -106,7 +105,6 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 		}
 	})
 
-
 	var pic []byte
 	var res *runtime.RemoteObject
 	var err error
@@ -125,7 +123,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 			network.Enable(),
 			network.SetExtraHTTPHeaders(network.Headers(headers)),
 			chromedp.Navigate(p.URL),
-			chromedp.Sleep(time.Duration(a.session.Options.ScreenshotDelay)*time.Millisecond),
+			chromedp.Sleep(time.Duration(a.session.Options.ScreenshotDelay) * time.Millisecond),
 			chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
 			chromedp.FullScreenshot(&pic, 100),
 		})
@@ -134,7 +132,7 @@ func (a *URLScreenshotter) screenshotPage(p *core.Page) {
 			network.Enable(),
 			network.SetExtraHTTPHeaders(network.Headers(headers)),
 			chromedp.Navigate(p.URL),
-			chromedp.Sleep(time.Duration(a.session.Options.ScreenshotDelay)*time.Millisecond),
+			chromedp.Sleep(time.Duration(a.session.Options.ScreenshotDelay) * time.Millisecond),
 			chromedp.EvaluateAsDevTools(`window.alert = window.confirm = window.prompt = function (txt){return txt}`, &res),
 			chromedp.CaptureScreenshot(&pic),
 		})
