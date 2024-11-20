@@ -45,12 +45,14 @@ func (p *NmapParser) hostToURLs(host nmap.Host) []string {
 		}
 
 		var protocol string
-		if port.Service.Name == "ssl" {
-			protocol = "https"
-		} else if port.Service.Tunnel == "ssl" && (port.Service.Name != "smtp" && port.Service.Name != "imap" && port.Service.Name != "pop3") {
-			protocol = "https"
-		} else if port.Service.Name == "http" || port.Service.Name == "http-alt" {
-			protocol = "http"
+		if port.Protocol == "tcp" && (port.Service.Name == "http" || port.Service.Name == "http-alt") {
+			if port.Service.Tunnel == "ssl" {
+				protocol = "https"
+			} else {
+				protocol = "http"
+			}
+		} else {
+			continue
 		}
 
 		if len(host.Hostnames) > 0 {
